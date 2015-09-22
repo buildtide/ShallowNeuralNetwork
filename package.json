@@ -1,0 +1,18 @@
+{
+  "name": "neural_network",
+  "version": "1.0.0",
+  "description": "Neural network for training and prediction.",
+  "main": "NN.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Neural",
+    "Network"
+  ],
+  "author": "Hussain Mir Ali",
+  "license": "MIT",
+  "dependencies": {
+    "mathjs": "^2.2.0"
+  }
+}
