@@ -4,8 +4,8 @@ var Neural_Network = function(inputSize, hiddenSize, outPutSize, learningRate, X
     this.y = this.MathJS.matrix(Y);
 
     this.inputLayerSize = inputSize || 2;
-    this.outputLayerSize = hiddenSize || 1;
-    this.hiddenLayerSize = outPutSize || 3;
+    this.outputLayerSize = outPutSize || 1;
+    this.hiddenLayerSize = hiddenSize || 3;
     this.learningRate = learningRate || 1;
 
     this.W1 = (this.MathJS.random(this.MathJS.matrix([this.inputLayerSize, this.hiddenLayerSize]), -5, 5));
@@ -88,7 +88,9 @@ Neural_Network.prototype.gradientDescent = function() {
        this.W1 = this.MathJS.eval('W1 - rate*dJdW1', scope);
 	   cost = this.costFunction() 
        if(cost < (1/this.MathJS.exp(6)))
+       {
 		 break;
+       }
        if(i%100 === 0)
        {
         console.log('Cost : '+cost);
@@ -101,13 +103,13 @@ Neural_Network.prototype.predict = function(X) {
 };
 
 var nn = new Neural_Network(undefined, undefined, undefined, 0.5, [
-    [1, 5],
-    [6, 6],
-    [3, 4]
+    [1, 1],
+    [0, 1],
+    [1, 0]
 ], [
     [1],
-    [6],
-    [3]
+    [0],
+    [1]
 ]);
 
     nn.gradientDescent();
