@@ -84,7 +84,7 @@ Neural_Network.prototype.gradientDescent = function() {
     var gradient = new Array(2),
         scope = {},
         i = 0;
-    console.log('Training\n');
+    console.log('Training ...\n');
     while (1) {
         gradient = this.costFunction_Prime();
         scope.W1 = this.W1;
