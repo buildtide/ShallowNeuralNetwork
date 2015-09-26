@@ -99,8 +99,9 @@ Neural_Network.prototype.gradientDescent = function() {
             break;
         }
         if (i % 100 === 0) {
-            console.log('Cost : ' + cost);
+            console.log('Cost : ' +cost);
         }
+        i++;
     }
 };
 
@@ -108,7 +109,7 @@ Neural_Network.prototype.predict = function(X) {
     return this.forwardPropogation(X);
 };
 
-var nn = new Neural_Network(0.7, [
+var nn = new Neural_Network(0.9, [
     [1, 1, 1, 1, 0, 1],
     [0, 1, 0, 0, 1, 0],
     [1, 0, 1, 1, 1, 1],
