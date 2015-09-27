@@ -1,7 +1,6 @@
 # NeuralNetwork 
 ###[Author: Hussain Mir Ali]
-An artificial neural network with single hidden layer written in JavaScript programming language. The applications include disease prediction, optimizing workout routine and analysis of scientific data.
-
+An artificial neural network with single hidden layer written in JavaScript programming language. The applications include disease prediction, optimizing workout routine and stock prediction. In the NN.js file I have used sample data.
 
 To run the project:
 
