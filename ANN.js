@@ -37,7 +37,7 @@ Neural_Network.prototype.sigmoid = function(z) {
         },
         sigmoid;
 
-    scope.ones = this.MathJS.ones(z.size()[0], z.size()[1]);
+    scope.ones = this.MathJS.ones(scope.z.size()[0], scope.z.size()[1]);
     sigmoid = this.MathJS.eval('(ones+(e.^(z.*-1))).^-1', scope); //1/(1+e^(-z))
     return sigmoid;
 };
@@ -148,3 +148,4 @@ Neural_Network.prototype.predict_result = function(X) {
 };
 
 module.exports = Neural_Network;
+
