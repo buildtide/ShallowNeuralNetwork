@@ -1,18 +1,28 @@
 {
-  "name": "neural_network",
+  "name": "artificial-neural-network",
   "version": "1.0.0",
   "description": "Neural network for training and prediction.",
-  "main": "NN.js",
+  "main": "ANN.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "Neural",
-    "Network"
+    "Neural Network",
+    "Machine Learning"
   ],
   "author": "Hussain Mir Ali",
   "license": "MIT",
   "dependencies": {
-    "mathjs": "^2.2.0"
-  }
+    "mathjs": "^2.2.0",
+    "q": "^1.4.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/husenxce/NeuralNetwork.git"
+  },
+  "bugs": {
+    "url": "https://github.com/husenxce/NeuralNetwork/issues"
+  },
+  "homepage": "https://github.com/husenxce/NeuralNetwork#readme"
 }
