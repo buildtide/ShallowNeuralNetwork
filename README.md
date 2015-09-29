@@ -33,4 +33,3 @@ nn.train_network(0.9, [
     [1],
     [1]
 ]).then(console.log(nn.predict_result([[1,0,1,0,1,1]])));
-...
