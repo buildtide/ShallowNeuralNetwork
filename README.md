@@ -10,9 +10,9 @@ run 'sudo npm install -g'
 
 run 'node NN.js'
 
-Sample usage:
+###Sample usage:
 
-
+...JavaScript
 var Neural_Network = require('artificial-neural-network');
 var nn = new Neural_Network();
 
@@ -33,3 +33,4 @@ nn.train_network(0.9, [
     [1],
     [1]
 ]).then(console.log(nn.predict_result([[1,0,1,0,1,1]])));
+...
