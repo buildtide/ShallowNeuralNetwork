@@ -12,7 +12,7 @@ run 'node NN.js'
 
 ###Sample usage:
 
-...JavaScript
+```javascript
 var Neural_Network = require('artificial-neural-network');
 var nn = new Neural_Network();
 
