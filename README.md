@@ -33,5 +33,5 @@ nn.train_network(0.9, [
     [1],
     [1]
 ]).then(console.log(nn.predict_result([[1,0,1,0,1,1]])));
-
+'''
 ![alt text](https://drive.google.com/file/d/0BxKH7DmsQXo1aFBuSkxLOFI5XzA/view?usp=sharing)
