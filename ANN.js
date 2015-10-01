@@ -84,11 +84,12 @@ Neural_Network.prototype.costFunction_Prime = function() {
     scope.sigmoid_prime_z3 = this.sigmoid_prime(this.z3);
 
     var del_3 = this.MathJS.eval('diff.*sigmoid_prime_z3', scope);
-
     var dJdW2 = this.MathJS.multiply(this.MathJS.transpose(this.a2), del_3);
 
-    var del_2 = this.MathJS.multiply(this.MathJS.multiply(del_3, this.MathJS.transpose(this.W2)), this.sigmoid_prime(this.z2))
+    scope.arrA = this.MathJS.multiply(del_3, this.MathJS.transpose(this.W2));
+    scope.arrB = this.sigmoid_prime(this.z2);
 
+    var del_2 = this.MathJS.eval('arrA.*arrB',scope);
     var dJdW1 = this.MathJS.multiply(this.MathJS.transpose(this.x), del_2);
 
     return [dJdW1, dJdW2];
@@ -148,4 +149,3 @@ Neural_Network.prototype.predict_result = function(X) {
 };
 
 module.exports = Neural_Network;
-
