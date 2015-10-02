@@ -1,7 +1,7 @@
 {
   "name": "artificial-neural-network",
-  "version": "1.0.1",
-  "description": "Neural network for training and prediction.",
+  "version": "1.0.2",
+  "description": "Artificial neural network for data prediction.",
   "main": "ANN.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

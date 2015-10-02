@@ -2,13 +2,11 @@
 ###[Author: Hussain Mir Ali]
 An artificial neural network I created with a single hidden layer. This project has been written in JavaScript. The applications include disease prediction, optimizing workout routine and stock prediction. 
 
-To run the project:
+To use the project:
 
-clone the project in your local repo.
+run: npm install -g artificial-neural-network
 
-run 'sudo npm install -g'
-
-run 'node NN.js'
+and follow the sample usage provided below.
 
 ###Sample usage:
 
