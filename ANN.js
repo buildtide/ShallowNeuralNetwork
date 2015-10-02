@@ -129,7 +129,7 @@ Neural_Network.prototype.train_network = function(learningRate, X, Y) {
     this.x = this.MathJS.matrix(X);
     this.y = this.MathJS.matrix(Y);
 
-    if ((this.y.size()[0] !== this.x.size()[0]) {
+    if ((this.y.size()[0] !== this.x.size()[0])) {
         console.log('\nPlease change the size of the input matrices so that X and Y have same number of rows.')
     } else {
         this.inputLayerSize = this.x.size()[1];
