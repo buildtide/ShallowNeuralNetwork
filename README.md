@@ -54,6 +54,3 @@ Matrix {
   _datatype: undefined }
 */
 ```
-
-###Note: 
-This algorithm is more suited to binary classification problems with 0's and 1's as the optimization algorithm used is Batch gradient descent.
