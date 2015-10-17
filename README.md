@@ -15,7 +15,7 @@ and follow the sample usage provided below.
 ```javascript
 var nn = new Neural_Network();
 
-nn.train_network(0.9, undefined, [
+nn.train_network(0.9, undefined /*optional threshold value*/, [
     [1, 1, 1, 1, 0, 1],
     [0, 1, 0, 0, 1, 0],
     [1, 0, 1, 1, 1, 1],
