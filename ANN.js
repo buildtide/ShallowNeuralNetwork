@@ -51,15 +51,15 @@ Neural_Network.prototype.forwardPropogation = function(X) {
     return y_result;
 };
 
-Neural_Network.prototype.sigmoid_prime = function(z) {
+Neural_Network.prototype.sigmoid_Derivative = function(z) {
     var scope = {
             z: z
         },
-        sigmoid_prime;
+        sigmoid_Derivative;
     scope.ones = this.MathJS.ones(z.size()[0], z.size()[1]);
-    sigmoid_prime = this.MathJS.eval('(e.^(z.*-1))./(ones+(e.^(z.*-1))).^2', scope); //(1+e^(-z))/(1+e^(-z))^2
+    sigmoid_Derivative = this.MathJS.eval('(e.^(z.*-1))./(ones+(e.^(z.*-1))).^2', scope); //(1+e^(-z))/(1+e^(-z))^2
 
-    return sigmoid_prime;
+    return sigmoid_Derivative;
 };
 
 Neural_Network.prototype.costFunction = function() {
@@ -75,19 +75,19 @@ Neural_Network.prototype.costFunction = function() {
     return J;
 };
 
-Neural_Network.prototype.costFunction_Prime = function() {
+Neural_Network.prototype.costFunction_Derivative = function() {
     this.y_result = this.forwardPropogation(this.x);
     var scope = {};
     scope.y_result = this.y_result;
     scope.y = this.y;
     scope.diff = this.MathJS.eval('-(y-y_result)', scope);
-    scope.sigmoid_prime_z3 = this.sigmoid_prime(this.z3);
+    scope.sigmoid_Derivative_z3 = this.sigmoid_Derivative(this.z3);
 
-    var del_3 = this.MathJS.eval('diff.*sigmoid_prime_z3', scope);
+    var del_3 = this.MathJS.eval('diff.*sigmoid_Derivative_z3', scope);
     var dJdW2 = this.MathJS.multiply(this.MathJS.transpose(this.a2), del_3);
 
     scope.arrA = this.MathJS.multiply(del_3, this.MathJS.transpose(this.W2));
-    scope.arrB = this.sigmoid_prime(this.z2);
+    scope.arrB = this.sigmoid_Derivative(this.z2);
 
     var del_2 = this.MathJS.eval('arrA.*arrB',scope);
     var dJdW1 = this.MathJS.multiply(this.MathJS.transpose(this.x), del_2);
@@ -104,7 +104,7 @@ Neural_Network.prototype.gradientDescent = function() {
         i = 0;
     console.log('Training ...\n');
     while (1) {
-        gradient = this.costFunction_Prime();
+        gradient = this.costFunction_Derivative();
         scope.W1 = this.W1;
         scope.W2 = this.W2;
         scope.rate = this.learningRate;
@@ -113,24 +113,28 @@ Neural_Network.prototype.gradientDescent = function() {
         this.W2 = this.MathJS.eval('W2 - rate*dJdW2', scope);
         this.W1 = this.MathJS.eval('W1 - rate*dJdW1', scope);
         cost = this.costFunction()
-        if (cost < (1 / this.MathJS.exp(6))) {
+        if (cost < (1 / (this.threshold||this.MathJS.exp(6)))) {
             defered.resolve();
             break;
         }
         if (i % 100 === 0) {
-            console.log('Cost : ' + cost);
+            console.log({'iteration': i, 'cost': cost}); //notify cost values for diagnosing the performance of learning algorithm.
         }
         i++;
     }
     return defered.promise;
 };
 
-Neural_Network.prototype.train_network = function(learningRate, X, Y) {
+Neural_Network.prototype.train_network = function(learningRate, threshold, X, Y) {
     this.x = this.MathJS.matrix(X);
     this.y = this.MathJS.matrix(Y);
+    this.threshold = threshold;
 
     if ((this.y.size()[0] !== this.x.size()[0])) {
-        console.log('\nPlease change the size of the input matrices so that X and Y have same number of rows.')
+        console.log('\nPlease change the size of the input matrices so that X and Y have same number of rows.');
+    }
+    else if((this.y.size()[1]>1)){
+        console.log('\nPlease change the size of the input matrix Y such that there is only one column because this a single class classifier.');
     } else {
         this.inputLayerSize = this.x.size()[1];
         this.outputLayerSize = 1;
