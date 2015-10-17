@@ -13,10 +13,9 @@ and follow the sample usage provided below.
 ###Sample usage:
 
 ```javascript
-var Neural_Network = require('artificial-neural-network');
 var nn = new Neural_Network();
 
-nn.train_network(0.9, [
+nn.train_network(0.9, undefined, [
     [1, 1, 1, 1, 0, 1],
     [0, 1, 0, 0, 1, 0],
     [1, 0, 1, 1, 1, 1],
@@ -39,18 +38,20 @@ nn.train_network(0.9, [
 /*Output
 Training ...
 
-Cost : 1.453592583906486
-Cost : 0.4159937554245137
-Cost : 0.025923046481012398
-Cost : 0.009822261833421162
-Cost : 0.0061083440270317405
-Cost : 0.004465405304472341
-Cost : 0.003535895517299884
-Cost : 0.0029361733961879855
-Cost : 0.002516116097524427
-Matrix {
-  _data: [ [ 0.03131379484990236 ] ],
+{ iteration: 0, cost: 1.383523290363864 }
+{ iteration: 100, cost: 0.04008406998951956 }
+{ iteration: 200, cost: 0.016181475081737937 }
+{ iteration: 300, cost: 0.009841798424077541 }
+{ iteration: 400, cost: 0.0069985481625215226 }
+{ iteration: 500, cost: 0.005402782030422182 }
+{ iteration: 600, cost: 0.00438707375793734 }
+{ iteration: 700, cost: 0.003686178233980667 }
+{ iteration: 800, cost: 0.003174502735338863 }
+{ iteration: 900, cost: 0.0027851304470238596 }
+{ iteration: 1000, cost: 0.0024792318930790076 }
+{ _data: [ [ 0.030592746473324182 ] ],
   _size: [ 1, 1 ],
   _datatype: undefined }
+
 */
 ```
