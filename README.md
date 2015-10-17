@@ -2,6 +2,9 @@
 ###[Author: Hussain Mir Ali]
 An artificial neural network I created with a single hidden layer. This project has been written in JavaScript. The applications include disease prediction, optimizing workout routine and stock prediction. 
 
+##Note: 
+This project uses batch gradient descent so it is best suited for binary classification which has a lower initial cost. But improvements to this algorithm will be made to run stochastic gradient descent.
+
 npm link: https://www.npmjs.com/package/artificial-neural-network
 
 To use the project:
