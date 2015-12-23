@@ -1,32 +1,17 @@
-/*
-The MIT License (MIT)
 
-Copyright (c) <2015> <Hussain Mir Ali>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
 
 "use strict";
 
-var Neural_Network = function() {
+var Neural_Network = function(args) {
     this.MathJS = require('mathjs');
+    this.threshold = args.threshold||(1/this.MathJS.exp(6));
+    this.iteration_callback = args.iteration_callback;
     this.q = require('q');
+    this.regularization_param = args.regularization_param || 0.01; 
+    this.learningRate = args.learningRate || 0.5;
+    this.maximum_iterations = args.maximum_iterations || 0;
+    this.notify_count = args.notify_count || 100;
 };
 
 Neural_Network.prototype.sigmoid = function(z) {
@@ -69,8 +54,10 @@ Neural_Network.prototype.costFunction = function() {
     scope.y_result = this.y_result;
     scope.y = this.y;
     scope.x = this.x;
+    scope.W1 = this.W1;
+    scope.W2 = this.W2;
 
-    J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope));
+    J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope))/(this.x.size()[0]) + (this.regularization_param/2)*this.MathJS.sum(this.MathJS.eval('W1.^2+W2.^2',scope));//regularization parameter
 
     return J;
 };
@@ -82,17 +69,26 @@ Neural_Network.prototype.costFunction_Derivative = function() {
     scope.y = this.y;
     scope.diff = this.MathJS.eval('-(y-y_result)', scope);
     scope.sigmoid_Derivative_z3 = this.sigmoid_Derivative(this.z3);
+    scope.regularization_param = this.regularization_param;
+    scope.W2 = this.W2;
+    scope.W1 = this.W1;
+    scope.m = this.x.size()[0];
 
     var del_3 = this.MathJS.eval('diff.*sigmoid_Derivative_z3', scope);
     var dJdW2 = this.MathJS.multiply(this.MathJS.transpose(this.a2), del_3);
+        scope.dJdW2 = dJdW2;
+        dJdW2 = this.MathJS.eval('dJdW2.*(1/m)',scope) + this.MathJS.eval('W2.*regularization_param', scope);
 
     scope.arrA = this.MathJS.multiply(del_3, this.MathJS.transpose(this.W2));
     scope.arrB = this.sigmoid_Derivative(this.z2);
 
     var del_2 = this.MathJS.eval('arrA.*arrB',scope);
     var dJdW1 = this.MathJS.multiply(this.MathJS.transpose(this.x), del_2);
+        scope.dJdW1 = dJdW1;
+        dJdW1 = this.MathJS.eval('dJdW1.*(1/m)',scope) + this.MathJS.eval('W1.*regularization_param', scope);
 
-    return [dJdW1, dJdW2];
+
+    return {'dJdW1': dJdW1, 'dJdW2': dJdW2};
 
 };
 
@@ -108,43 +104,43 @@ Neural_Network.prototype.gradientDescent = function() {
         scope.W1 = this.W1;
         scope.W2 = this.W2;
         scope.rate = this.learningRate;
-        scope.dJdW1 = gradient[0];
-        scope.dJdW2 = gradient[1];
+        scope.dJdW1 = gradient.dJdW1;
+        scope.dJdW2 = gradient.dJdW2;
         this.W2 = this.MathJS.eval('W2 - rate*dJdW2', scope);
         this.W1 = this.MathJS.eval('W1 - rate*dJdW1', scope);
-        cost = this.costFunction()
-        if (cost < (1 / (this.threshold||this.MathJS.exp(6)))) {
+        cost = this.costFunction();
+        if (cost < (this.threshold)) {
             defered.resolve();
             break;
         }
-        if (i % 100 === 0) {
-            console.log({'iteration': i, 'cost': cost}); //notify cost values for diagnosing the performance of learning algorithm.
+        if (i % this.notify_count === 0 && iteration_callback !== undefined) {
+             iteration_callback.apply(null, [cost, i/*iteration count*/]);//notify cost values for diagnosing the performance of learning algorithm.
         }
         i++;
+        if(i>this.maximum_iterations)
+        {
+         defered.resolve();
+         break;
+        }
     }
     return defered.promise;
 };
 
-Neural_Network.prototype.train_network = function(learningRate, threshold, X, Y) {
+Neural_Network.prototype.train_network = function(X, Y) {
     this.x = this.MathJS.matrix(X);
     this.y = this.MathJS.matrix(Y);
-    this.threshold = threshold;
 
     if ((this.y.size()[0] !== this.x.size()[0])) {
         console.log('\nPlease change the size of the input matrices so that X and Y have same number of rows.');
     }
-    else if((this.y.size()[1]>1)){
-        console.log('\nPlease change the size of the input matrix Y such that there is only one column because this a single class classifier.');
-    } else {
+   else {
         this.inputLayerSize = this.x.size()[1];
         this.outputLayerSize = 1;
         this.hiddenLayerSize = this.x.size()[1] + 1;
-        this.learningRate = learningRate || 0.5;
-
         this.W1 = (this.MathJS.random(this.MathJS.matrix([this.inputLayerSize, this.hiddenLayerSize]), -5, 5));
-        this.W2 = (this.MathJS.random(this.MathJS.matrix([this.hiddenLayerSize, this.outputLayerSize]), -5, 5));
+        this.W2 = (this.MathJS.random(this.MathJS.matrix([this.hiddenLayerSize, this.outputLayerSize*this.y.size()[1]]), -5, 5));
+        }
         return this.gradientDescent();
-    }
 };
 
 Neural_Network.prototype.predict_result = function(X) {
@@ -153,3 +149,33 @@ Neural_Network.prototype.predict_result = function(X) {
 };
 
 module.exports = Neural_Network;
+
+var nn = new Neural_Network(
+    {'learning_rate':0.9, 
+     'threshold_value':undefined /*optional threshold value*/, 
+     'regularization_parameter': 0.01 /*optional regularization parameter to prevent overfitting*/, 
+     'notify_count':  1000 /*optional value to execute the callback after every x number of iterations*/,
+     'iteration_callback': undefined/*optional callback that can be used for getting cost and iteration value on every notify count.*/,
+     'maximum_iterations': 100000  /*optional maximum iterations to be allowed*/});
+
+nn.train_network([
+    [1, 1, 1, 1, 0, 1],
+    [0, 1, 0, 0, 1, 0],
+    [1, 0, 1, 1, 1, 1],
+    [0, 1, 1, 0, 0, 0],
+    [1, 0, 0, 1, 0, 1],
+    [0, 0, 1, 0, 0, 0],
+    [1, 1, 0, 1, 1, 1],
+    [1, 0, 0, 1, 0, 1]
+], [
+    [1,1,0],
+    [0,0,1],
+    [1,1,1],
+    [1,0,1],
+    [0,1,0],
+    [1,0,0],
+    [1,1,0],
+    [0,1,0]
+]).then(console.log(nn.predict_result([[1,0,0,1,0,1]])),function(){},function(data){
+    console.log(data);
+});
