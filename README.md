@@ -1,27 +1,43 @@
 # Neural Network 
 ###[Author: Hussain Mir Ali]
-An artificial neural network I created with a single hidden layer. This project has been written in JavaScript. The applications include disease prediction, optimizing workout routine and stock prediction. 
+An artificial Neural Network with single layer and multiclass classification. This project has been written in JavaScript. The applications include disease prediction, optimizing workout routine and stock prediction. 
 
 ##Note: 
-This project uses batch gradient descent so it is best suited for binary classification which has a lower initial cost. But improvements to this algorithm will be made to run stochastic gradient descent.
+-Please perform Feature Scaling and/or Mean Normalization along with random shuffling of data for using this program.
+
+
 
 ##Installation:
-npm link: https://www.npmjs.com/package/artificial-neural-network
 
 To use the project:
+-Download the project folder.
+-Run 'sudo npm install -g" in your terminal.
+-Copy the folder to the node_modules folder in your project directory.
 
-run: npm install -g artificial-neural-network
-
-and follow the sample usage provided below.
+##Testing:
+-For testing Mocha has been used along with Sinon for unit tests. On older computers run the command 'mocha --timeout 30000', the 300000 ms timeout is to give time for tests to complete as they might not process quickly on older computers. If need be more than 300000 ms should be used to run the tests depending on the processing power of the computer. 
 
 ###Sample usage:
 
 ```javascript
-var nn = new Neural_Network();
+var NeuralNetwork = require('artificial-neural-network');
+var callback_data;
 
-nn.train_network(0.9, undefined /*optional threshold value*/, [
-    [1, 1, 1, 1, 0, 1],
-    [0, 1, 0, 0, 1, 0],
+var callback = function (data) {
+    console.log(data);
+    callback_data = data;
+};
+
+var nn = new NeuralNetwork({
+    'path': undefined, /*optional path to save the weights*/
+    'learningRate':0.9, 
+     'threshold_value':undefined /*optional threshold value*/, 
+     'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting*/, 
+     'notify_count':  100/*optional value to execute the callback after every x number of iterations*/,
+     'iteration_callback': callback/*optional callback that can be used for getting cost and iteration value on every notify count.*/,
+     'maximum_iterations': 10000 /*optional maximum iterations to be allowed*/});
+
+nn.train_network([
     [1, 0, 1, 1, 1, 1],
     [0, 1, 1, 0, 0, 0],
     [1, 0, 0, 1, 0, 1],
@@ -29,33 +45,22 @@ nn.train_network(0.9, undefined /*optional threshold value*/, [
     [1, 1, 0, 1, 1, 1],
     [1, 0, 0, 1, 0, 1]
 ], [
-    [1],
-    [0],
-    [1],
-    [1],
-    [0],
-    [1],
-    [1],
-    [0]
-]).then(console.log(nn.predict_result([[1,0,0,1,0,1]])));
-
-/*Output
-Training ...
-
-{ iteration: 0, cost: 1.383523290363864 }
-{ iteration: 100, cost: 0.04008406998951956 }
-{ iteration: 200, cost: 0.016181475081737937 }
-{ iteration: 300, cost: 0.009841798424077541 }
-{ iteration: 400, cost: 0.0069985481625215226 }
-{ iteration: 500, cost: 0.005402782030422182 }
-{ iteration: 600, cost: 0.00438707375793734 }
-{ iteration: 700, cost: 0.003686178233980667 }
-{ iteration: 800, cost: 0.003174502735338863 }
-{ iteration: 900, cost: 0.0027851304470238596 }
-{ iteration: 1000, cost: 0.0024792318930790076 }
-{ _data: [ [ 0.030592746473324182 ] ],
-  _size: [ 1, 1 ],
-  _datatype: undefined }
+    [1,1,1],
+    [1,0,1],
+    [0,1,0],
+    [1,0,0],
+    [1,1,0],
+    [0,1,0]
+]).then(nn.cross_validate_network([   
+    [1, 1, 1, 1, 0, 1],
+    [0, 1, 0, 0, 1, 0]],[
+    [1,1,1],
+    [1,0,1]]
+    )).then(nn.test_network([
+    [1, 1, 1, 1, 0, 1],
+    [0, 1, 0, 0, 1, 0]],
+    [[0,1,1],
+    [1,0,0]])).then(console.log(nn.predict_result([[1,0,0,1,0,1]]))); 
 
 */
 ```

@@ -13,16 +13,14 @@
   "author": "Hussain Mir Ali",
   "license": "MIT",
   "dependencies": {
-    "mathjs": "^2.2.0",
-    "q": "^1.4.1"
-  },
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/husenxce/NeuralNetwork.git"
-  },
-  "bugs": {
-    "url": "https://github.com/husenxce/NeuralNetwork/issues"
+    "csv-parse": "^1.0.1",
+    "fs": "0.0.2",
+    "karma": "^0.13.15",
+    "mathjs": "^2.5.0",
+    "q": "^1.4.1",
+    "sinon": "^1.17.2",
+    "yuidocjs":"^0.9.0",
+    "mocha":"^2.3.4"
   },
   "homepage": "https://github.com/husenxce/NeuralNetwork#readme"
 }
