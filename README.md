@@ -17,8 +17,9 @@ An artificial Neural Network with single hidden layer and multiclass classificat
 
 ##To use the project:
 *  Download the project folder.
-*  Run 'sudo npm install -g" in your terminal.
-*  Copy the folder to the node_modules folder in your project directory.
+*  Run 'sudo npm install -g" in your terminal under the project directory.
+*  Copy the folder to your library folder in your project directory.
+*  Require it using 'require('./library/artificial-neural-network/NeuralNetwork')' in your main JavaScript file.
 
 ##Testing:
 * For unit testing Mocha has been used along with Sinon. 
@@ -33,7 +34,7 @@ An artificial Neural Network with single hidden layer and multiclass classificat
 ###Sample usage:
 
 ```javascript
-var NeuralNetwork = require('artificial-neural-network');
+var NeuralNetwork = require('./artificial-neural-network/NeuralNetwork');
 var callback_data;
 
 var callback = function (data) {
