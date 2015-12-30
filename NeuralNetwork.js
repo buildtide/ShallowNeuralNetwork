@@ -24,7 +24,7 @@ var NeuralNetwork = function(args) {
     this.MathJS = require('mathjs');
     this.q = require('q');
     this.initArgs = args;
-    this.path = args.path || new Array('./data/Weights_Layer1.txt', './data/Weights_Layer2.txt');
+    this.path = args.path || new Array(__dirname+'/data/Weights_Layer1.txt', __dirname+'/data/Weights_Layer2.txt');
     this.threshold = args.threshold || (1 / this.MathJS.exp(6));
     this.algorithm_mode = 0;
     this.iteration_callback = args.iteration_callback;
@@ -390,3 +390,6 @@ NeuralNetwork.prototype.test_network = function(X, Y) {
 };
 
 module.exports = NeuralNetwork;
+
+
+

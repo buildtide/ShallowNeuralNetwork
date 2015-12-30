@@ -6,7 +6,7 @@ var parse = require('csv-parse');
 
 describe('NeuralNetwork', function() {
 
-	var callback_data, path = new Array("./test/Test_Weights_Layer1.txt", "./test/Test_Weights_Layer2.txt");
+	var callback_data, path = new Array(__dirname+"/Test_Weights_Layer1.txt", __dirname+"/Test_Weights_Layer2.txt");
 
 	var callback = function(data) {
 		callback_data = data;
@@ -27,8 +27,8 @@ describe('NeuralNetwork', function() {
 	var getInitParams = nn.getInitParams();
 
 	it("should correctly set parameters", function() {
-		assert.deepStrictEqual(getInitParams.path[0], './test/Test_Weights_Layer1.txt');
-		assert.deepStrictEqual(getInitParams.path[1], './test/Test_Weights_Layer2.txt');
+		assert.deepStrictEqual(getInitParams.path[0], __dirname+'/Test_Weights_Layer1.txt');
+		assert.deepStrictEqual(getInitParams.path[1], __dirname+'/Test_Weights_Layer2.txt');
 		assert.deepStrictEqual(getInitParams.learningRate, 0.9);
 		assert.deepStrictEqual(getInitParams.algorithm_mode, 0);
 		assert.deepStrictEqual(getInitParams.threshold, (1 / mathJS.exp(6)));
