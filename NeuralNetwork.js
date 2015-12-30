@@ -1,3 +1,6 @@
+/**
+Copyright (c) 2015-2016 Hussain Mir Ali
+**/
 "use strict";
 
 /**

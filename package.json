@@ -1,26 +1,31 @@
 {
   "name": "artificial-neural-network",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Artificial neural network for data prediction.",
-  "main": "ANN.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "NeuralNetwork.js,
   "keywords": [
     "Neural Network",
-    "Machine Learning"
+    "Machine Learning",
+    "artificial-neural-network"
   ],
   "author": "Hussain Mir Ali",
-  "license": "MIT",
+  "license": "EULA",
   "dependencies": {
     "csv-parse": "^1.0.1",
     "fs": "0.0.2",
-    "karma": "^0.13.15",
     "mathjs": "^2.5.0",
     "q": "^1.4.1",
     "sinon": "^1.17.2",
-    "yuidocjs":"^0.9.0",
-    "mocha":"^2.3.4"
+    "yuidocjs": "^0.9.0",
+    "mocha": "^2.3.4"
   },
-  "homepage": "https://github.com/husenxce/NeuralNetwork#readme"
+  "homepage": "https://github.com/husenxce/NeuralNetwork#readme",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "-"
+  }
 }
