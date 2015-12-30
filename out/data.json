@@ -1,0 +1,388 @@
+{
+    "project": {},
+    "files": {
+        "NeuralNetwork.js": {
+            "name": "NeuralNetwork.js",
+            "modules": {},
+            "classes": {
+                "NeuralNetwork": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "NeuralNetwork": {
+            "name": "NeuralNetwork",
+            "shortname": "NeuralNetwork",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "NeuralNetwork.js",
+            "line": 3,
+            "description": "The NeuralNetwork class contains all the necessary logic to train data for multiclass classification using single layer Neural Network.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "args",
+                    "description": "Contains all the necessary parameters for the neural network as listed below.",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "path",
+                            "description": "optional Path to save the weights.",
+                            "type": "String"
+                        },
+                        {
+                            "name": "learningRate",
+                            "description": "Learning rate for BackPropogation.",
+                            "type": "Number"
+                        },
+                        {
+                            "name": "threshold_value",
+                            "description": "Optional threshold value for error.",
+                            "type": "Number"
+                        },
+                        {
+                            "name": "regularization_parameter",
+                            "description": "Optional regularization parameter to prevent overfitting.",
+                            "type": "Number"
+                        },
+                        {
+                            "name": "notify_count",
+                            "description": "Optional value to execute the iteration_callback after every x number of iterations.",
+                            "type": "Number"
+                        },
+                        {
+                            "name": "iteration_callback",
+                            "description": "Optional callback that can be used for getting cost and iteration value on every notify count.",
+                            "type": "Function"
+                        },
+                        {
+                            "name": "maximum_iterations",
+                            "description": "Optional maximum iterations to be allowed before the optimization is complete.",
+                            "type": "Number"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "elements": {},
+    "classitems": [
+        {
+            "file": "NeuralNetwork.js",
+            "line": 34,
+            "description": "This method returns all the parameters passed to the constructor.",
+            "itemtype": "method",
+            "name": "getInitParams",
+            "return": {
+                "description": "Returns the constructor parameters.",
+                "type": "Object"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 54,
+            "description": "This method serves as the logic for the sigmoid function.",
+            "itemtype": "method",
+            "name": "sigmoid",
+            "params": [
+                {
+                    "name": "z",
+                    "description": "The matrix to be used as the input for the sigmoid function.",
+                    "type": "Matrix"
+                }
+            ],
+            "return": {
+                "description": "Returns the elementwise sigmoid of the input matrix.",
+                "type": "Matrix"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 75,
+            "description": "This method is responsible for the forwardPropagation in the Neural Network.",
+            "itemtype": "method",
+            "name": "forwardPropagation",
+            "params": [
+                {
+                    "name": "X",
+                    "description": "The input matrix representing the features.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "W1",
+                    "description": "The matrix representing the weights for layer 1.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "W2",
+                    "description": "The matrix representing the weights for layer 2.",
+                    "type": "Matrix"
+                }
+            ],
+            "return": {
+                "description": "Returns the resultant ouput of forwardPropagation.",
+                "type": "Matrix"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 95,
+            "description": "This method serves as the logic for the sigmoid function derivative.",
+            "itemtype": "method",
+            "name": "sigmoid_Derivative",
+            "params": [
+                {
+                    "name": "z",
+                    "description": "The matrix to be used as the input for the sigmoid function derivative.",
+                    "type": "Matrix"
+                }
+            ],
+            "return": {
+                "description": "Returns the elementwise sigmoid derivative of the input matrix.",
+                "type": "Matrix"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 113,
+            "description": "This method is responsible for the costFunction, i.e. error.",
+            "itemtype": "method",
+            "name": "costFunction",
+            "params": [
+                {
+                    "name": "X",
+                    "description": "The input matrix representing the features.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "Y",
+                    "description": "The output matrix corresponding to training data.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "algorithm_mode",
+                    "description": "The current algorithm mode (testing: 2, crossvalidating: 1, training: 0).",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "Returns the resultant cost.",
+                "type": "Number"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 141,
+            "description": "This method is responsible for the costFunction_Derivative, i.e. gradient of error with respect to weights.",
+            "itemtype": "method",
+            "name": "costFunction_Derivative",
+            "params": [
+                {
+                    "name": "X",
+                    "description": "The input matrix representing the features.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "Y",
+                    "description": "The output matrix corresponding to training data.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "W1",
+                    "description": "The matrix representing the weights for layer 1.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "W2",
+                    "description": "The matrix representing the weights for layer 2.",
+                    "type": "Matrix"
+                }
+            ],
+            "return": {
+                "description": "Returns the resultant gradients with respect to layer 1: dJdW1 and layer 2: dJdW2 of the Neural Network.",
+                "type": "Array"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 185,
+            "description": "This method is responsible for saving the trained weights of the Neural Network to text files at specified path.",
+            "itemtype": "method",
+            "name": "saveWeights",
+            "params": [
+                {
+                    "name": "weights",
+                    "description": "The weights of the layer1 and layer2 of the Neural Network.",
+                    "type": "Array"
+                },
+                {
+                    "name": "path",
+                    "description": "The path at wich the weights are to be saved.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Returns true after succesfuly saving the weights.",
+                "type": "Boolean"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 207,
+            "description": "This method is responsible for the optimization of weights, i.e. BackPropagation algorithm.",
+            "itemtype": "method",
+            "name": "gradientDescent",
+            "params": [
+                {
+                    "name": "X",
+                    "description": "The input matrix representing the features.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "Y",
+                    "description": "The output matrix corresponding to training data.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "W1",
+                    "description": "The matrix representing the weights for layer 1.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "W2",
+                    "description": "The matrix representing the weights for layer 2.",
+                    "type": "Matrix"
+                }
+            ],
+            "return": {
+                "description": "Returns a resolved promise with iteration and cost data on successful completion of optimization.",
+                "type": "Object"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 268,
+            "description": "This method is responsible for creating layers and initializing random weights.",
+            "itemtype": "method",
+            "name": "train_network",
+            "params": [
+                {
+                    "name": "X",
+                    "description": "The input matrix representing the features of the training set.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "Y",
+                    "description": "The output matrix corresponding to training set data.",
+                    "type": "Matrix"
+                }
+            ],
+            "return": {
+                "description": "Returns a resolved promise with iteration and cost data on successful completion of optimization.",
+                "type": "Object"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 293,
+            "description": "This contains logic to predict result for a given input after training on data.",
+            "itemtype": "method",
+            "name": "predict_result",
+            "params": [
+                {
+                    "name": "X",
+                    "description": "The input matrix representing the features.",
+                    "type": "Matrix"
+                }
+            ],
+            "return": {
+                "description": "Returns the resultant matrix after performing forwardPropagation on saved weights.",
+                "type": "Matrix"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 308,
+            "description": "This method is responsible for setting weights of the Neural Network from a specified path.",
+            "itemtype": "method",
+            "name": "setWeights",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "The path where the trained weights are to be found.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Returns a resolved promise after successfuly setting weights.",
+                "type": "Object"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 357,
+            "description": "This method is responsible for producing the cross validation error after training data.",
+            "itemtype": "method",
+            "name": "cross_validate_network",
+            "params": [
+                {
+                    "name": "X",
+                    "description": "The input matrix representing the features of the cross validation set.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "Y",
+                    "description": "The output matrix corresponding to training data of the cross validation set.",
+                    "type": "Matrix"
+                }
+            ],
+            "return": {
+                "description": "Returns an error value associated with the cross validation.",
+                "type": "Number"
+            },
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 371,
+            "description": "This method is responsible for producing the test error after training data.",
+            "itemtype": "method",
+            "name": "test_network",
+            "params": [
+                {
+                    "name": "X",
+                    "description": "The input matrix representing the features of the test set.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "Y",
+                    "description": "The output matrix corresponding to training data of the test set.",
+                    "type": "Matrix"
+                }
+            ],
+            "return": {
+                "description": "Returns an error value associated with testing.",
+                "type": "Number"
+            },
+            "class": "NeuralNetwork"
+        }
+    ],
+    "warnings": []
+}
