@@ -1,6 +1,6 @@
 # Neural Network 
 ###[Author: Hussain Mir Ali]
-An artificial Neural Network with single layer and multiclass classification. This project has been written in JavaScript. The applications include disease prediction, optimizing workout routine and stock prediction. 
+An artificial Neural Network with single hidden layer and multiclass classification. This project has been written in JavaScript. The applications include disease prediction, optimizing workout routine and stock prediction. 
 
 ##Note: 
 * Please perform Feature Scaling and/or Mean Normalization along with random shuffling of data for using this program.
