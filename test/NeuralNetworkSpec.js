@@ -6,14 +6,14 @@ var parse = require('csv-parse');
 
 describe('NeuralNetwork', function() {
 
-	var callback_data;
+	var callback_data, path = new Array("./test/Test_Weights_Layer1.txt", "./test/Test_Weights_Layer2.txt");
 
 	var callback = function(data) {
 		callback_data = data;
 	};
 
 	var nn = new NeuralNetwork({
-		'path': undefined,
+		'path': path,
 		/*optional path to save the weights*/
 		'learningRate': 0.9,
 		'algorithm_mode': 0 /*This is to specify if  testing:0, cross validating:1 or training:2 data.*/ ,
@@ -27,8 +27,8 @@ describe('NeuralNetwork', function() {
 	var getInitParams = nn.getInitParams();
 
 	it("should correctly set parameters", function() {
-		assert.deepStrictEqual(getInitParams.path[0], './data/Weights_Layer1.txt');
-		assert.deepStrictEqual(getInitParams.path[1], './data/Weights_Layer2.txt');
+		assert.deepStrictEqual(getInitParams.path[0], './test/Test_Weights_Layer1.txt');
+		assert.deepStrictEqual(getInitParams.path[1], './test/Test_Weights_Layer2.txt');
 		assert.deepStrictEqual(getInitParams.learningRate, 0.9);
 		assert.deepStrictEqual(getInitParams.algorithm_mode, 0);
 		assert.deepStrictEqual(getInitParams.threshold, (1 / mathJS.exp(6)));
@@ -41,17 +41,17 @@ describe('NeuralNetwork', function() {
 	describe('when saving and setting weights', function() {
 
 		var W1 = (mathJS.random(mathJS.matrix([9, 10]), -5, 5)),
-			W2 = (mathJS.random(mathJS.matrix([10, 3]), -5, 5)),
-			path = new Array("./test/Test_Weights_Layer1.txt", "./test/Test_Weights_Layer2.txt");
+			W2 = (mathJS.random(mathJS.matrix([10, 3]), -5, 5));
 
 		it('should successfuly save weights', function() {
 			assert.equal(nn.saveWeights([W1, W2], path), true);
 		});
 
-		it('should successfuly set weights', function() {
-			var success = false;
-			nn.setWeights(path).then(function(success) {
-				return assert(success.data, true);
+		it('should successfuly set weights', function(done) {
+			var success = true;
+			nn.setWeights(path).then(function(promise_data) {
+				assert(promise_data.success, true);
+				done();
 			});
 
 		});
@@ -64,7 +64,7 @@ describe('NeuralNetwork', function() {
 			W2 = (mathJS.random(mathJS.matrix([11, 3]), -5, 5));
 		var X = (mathJS.random(mathJS.matrix([10, 10]), 0, 1));
 		var Y = (mathJS.random(mathJS.matrix([10, 3]), 0, 1));
-		var y_result, z3, a2, z2, path = new Array("./test/Test_Weights_Layer1.txt", "./test/Test_Weights_Layer2.txt");
+		var y_result, z3, a2, z2;
 
 		it("should correctly run sigmoid()", function() {
 			var X = (mathJS.random(mathJS.matrix([10, 3]), 0, 1));

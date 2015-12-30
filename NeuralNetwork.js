@@ -326,31 +326,35 @@ NeuralNetwork.prototype.setWeights = function(path) {
                 throw (err);
             }
             defered.resolve();
-            contents_layer1 = array;
+            contents_layer1 = self.MathJS.matrix(array);
         })
-        return defered.promise;
-    })().
-    then(
-        this.parse(dataB, {}, function(err, array) {
-            var defered = self.q.defer();
-            if (err) {
-                throw (err);
-            }
-            defered.resolve();
-            contents_layer2 = array;
-            return defered.promise;
-        })).then(
-        function() {
-            var defered = self.q.defer();
-            if (contents_layer1 !== undefined && contents_layer2 !== undefined) {
-                this.W1 = this.MathJS.matrix(contents_layer1);
-                this.W2 = this.MathJS.matrix(contents_layer2);
 
-                defered.resolve(true);
-            } else {
-                defered.reject(false);
-            }
+        return defered.promise;
+    })().then(
+        function() {
+
+            var defered = self.q.defer();
+
+            self.parse(dataB, {}, function(err, array) {
+                if (err) {
+                    throw (err);
+                }
+                contents_layer2 = self.MathJS.matrix(array);
+                if (contents_layer1 !== undefined && contents_layer2 !== undefined) {
+                    self.W1 = (contents_layer1);
+                    self.W2 = (contents_layer2);
+                    defered.resolve({
+                        'success': true
+                    });
+                } else {
+                    defered.reject({
+                        'success': false
+                    });
+                }
+            });
+
             return defered.promise;
+
         });
 };
 
@@ -382,4 +386,4 @@ NeuralNetwork.prototype.test_network = function(X, Y) {
     return this.costFunction(X, Y, undefined);
 };
 
-module.exports = NeuralNetwork
+module.exports = NeuralNetwork;
