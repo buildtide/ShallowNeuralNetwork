@@ -3,23 +3,23 @@
 An artificial Neural Network with single layer and multiclass classification. This project has been written in JavaScript. The applications include disease prediction, optimizing workout routine and stock prediction. 
 
 ##Note: 
--Please perform Feature Scaling and/or Mean Normalization along with random shuffling of data for using this program.
+* Please perform Feature Scaling and/or Mean Normalization along with random shuffling of data for using this program.
 
 
 
 ##Installation:
 
 To use the project:
--Download the project folder.
--Run 'sudo npm install -g" in your terminal.
--Copy the folder to the node_modules folder in your project directory.
+* Download the project folder.
+* Run 'sudo npm install -g" in your terminal.
+* Copy the folder to the node_modules folder in your project directory.
 
 ##Testing:
--For testing Mocha has been used along with Sinon for unit tests. On older computers run the command 'mocha --timeout 30000', the 300000 ms timeout is to give time for tests to complete as they might not process quickly on older computers. If need be more than 300000 ms should be used to run the tests depending on the processing power of the computer. 
+* For testing Mocha has been used along with Sinon for unit tests. On older computers run the command 'mocha --timeout 30000', the 300000 ms timeout is to give time for tests to complete as they might not process quickly on older computers. If need be more than 300000 ms should be used to run the tests depending on the processing power of the computer. 
 
 ##Documentation
--The documentation is available in the 'out' folder in this project. Open the index.html file under 'out' folder in Crhome or Firefox.
--To regenerate the documentation run 'yuidoc .' in this project.
+*  The documentation is available in the 'out' folder in this project. Open the index.html file under 'out' folder in Crhome or Firefox.
+*  To regenerate the documentation run 'yuidoc .' in this project.
 
 ###Sample usage:
 
