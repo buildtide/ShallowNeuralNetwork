@@ -13,8 +13,8 @@ describe('NeuralNetwork', function() {
 	};
 
 	var nn = new NeuralNetwork({
-		'path': path,
-		/*optional path to save the weights*/
+		'path': path,/*optional path to save the weights*/
+		'hiddenLayerSize': 12,
 		'learningRate': 0.9,
 		'algorithm_mode': 0 /*This is to specify if  testing:0, cross validating:1 or training:2 data.*/ ,
 		'threshold_value': undefined /*optional threshold value*/ ,
@@ -30,6 +30,7 @@ describe('NeuralNetwork', function() {
 		assert.deepStrictEqual(getInitParams.path[0], __dirname+'/Test_Weights_Layer1.txt');
 		assert.deepStrictEqual(getInitParams.path[1], __dirname+'/Test_Weights_Layer2.txt');
 		assert.deepStrictEqual(getInitParams.learningRate, 0.9);
+		assert.deepStrictEqual(getInitParams.hiddenLayerSize, 12);
 		assert.deepStrictEqual(getInitParams.algorithm_mode, 0);
 		assert.deepStrictEqual(getInitParams.threshold, (1 / mathJS.exp(6)));
 		assert.deepStrictEqual(getInitParams.regularization_param, 0.01);
