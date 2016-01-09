@@ -21,8 +21,8 @@ An artificial neural network with single hidden layer and multiclass classificat
 
 ##Testing:
 * For unit testing Mocha and Sinon have been used. 
-* On newer computers run the command 'mocha --timeout 5000', the 5000 ms timeout is to give enough time for tests to complete as they might not process before timeout. 
-* On older computers run the command 'mocha --timeout 30000', the 300000 ms timeout is to give enough time for tests to complete as they might not process before timeout on older computers. 
+* On newer computers run the command 'mocha --timeout 50000', the 5000 ms timeout is to give enough time for tests to complete as they might not process before timeout. 
+* On older computers run the command 'mocha --timeout 300000', the 300000 ms timeout is to give enough time for tests to complete as they might not process before timeout on older computers. 
 * If need be more than 300000 ms should be used to run the tests depending on the processing power of the computer. 
 
 ##Documentation
