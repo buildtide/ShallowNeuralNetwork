@@ -1,13 +1,8 @@
 {
-  "name": "artificial-neural-network",
+  "name": "advance-neural-network",
   "version": "1.0.6",
   "description": "Artificial neural network for data prediction.",
   "main": "NeuralNetwork.js",
-  "keywords": [
-    "Neural Network",
-    "Machine Learning",
-    "artificial-neural-network"
-  ],
   "author": "Hussain Mir Ali",
   "private": true,
   "license": "",
@@ -24,7 +19,6 @@
   "directories": {
     "test": "test"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "-"
