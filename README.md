@@ -15,9 +15,9 @@ An artificial neural network with single hidden layer and multiclass classificat
 
 ##Installation:
 *  Download the project and unzip it.
-*  Run 'sudo npm install -g" in your terminal under the 'advance-neural-network' project directory.
-*  Copy the folder to your node_modules folder in your project directory.
+*  Copy the 'advance-neural-network' folder to your node_modules folder in your project directory.
 *  Require it using 'require('advance-neural-network')' in your main JavaScript file.
+*  If you want to reinstall node_modules for this project then run 'sudo npm install -g" in your terminal under the 'advance-neural-network' project directory.
 
 ##Testing:
 * For unit testing Mocha and Sinon have been used. 
