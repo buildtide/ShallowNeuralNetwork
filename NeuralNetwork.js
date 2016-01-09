@@ -400,10 +400,3 @@ NeuralNetwork.prototype.test_network = function(X, Y) {
 };
 
 module.exports = NeuralNetwork;
-
-var callback_data;
-
-var callback = function(data) {
-  console.log(data);
-  callback_data = data;
-};

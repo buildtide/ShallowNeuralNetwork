@@ -1,4 +1,4 @@
-Artificial Neural Network 1.0.6
+Artificial Neural Network 1.0.7
 Copyright (c) 2015-2016 Hussain Mir Ali
 
 *** END USER LICENSE AGREEMENT ***
