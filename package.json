@@ -9,7 +9,8 @@
     "artificial-neural-network"
   ],
   "author": "Hussain Mir Ali",
-  "license": "EULA",
+  "private": true,
+  "license": "",
   "dependencies": {
     "csv-parse": "^1.0.1",
     "fs": "0.0.2",
