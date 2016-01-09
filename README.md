@@ -48,7 +48,7 @@ var nn = new NeuralNetwork({
      'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting*/, 
      'notify_count':  100/*optional value to execute the callback after every x number of iterations*/,
      'iteration_callback': callback/*optional callback that can be used for getting cost and iteration value on every notify count.*/,
-     'maximum_iterations': 100 /*optional maximum iterations to be allowed*/});
+     'maximum_iterations': 10000 /*optional maximum iterations to be allowed*/});
 
 nn.train_network([
     [1, 0, 1, 1, 1, 1],
