@@ -47,8 +47,6 @@ You will indemnify, hold harmless, and defend Hussain Mir Ali , its employees, a
 
 In no event (including, without limitation, in the event of negligence) will Hussain Mir Ali , its employees, agents or distributors be liable for any consequential, incidental, indirect, special or punitive damages whatsoever (including, without limitation, damages for loss of profits, loss of use, business interruption, loss of information or data, or pecuniary loss), in connection with or arising out of or related to this Agreement, advance-neural-network 1.0.0 or the use or inability to use advance-neural-network 1.0.0 or the furnishing, performance or use of any other matters hereunder whether based upon contract, tort or any other theory including negligence.
 
-Hussain Mir Ali's entire liability, without exception, is limited to the customers' reimbursement of the purchase price of the Software (maximum being the lesser of the amount paid by you and the suggested retail price as listed by Hussain Mir Ali ) in exchange for the return of the product, all copies, registration papers and manuals, and all materials that constitute a transfer of license from the customer back to Hussain Mir Ali.
-
 3.5 Warranties
 
 Except as expressly stated in writing, Hussain Mir Ali makes no representation or warranties in respect of this Software and expressly excludes all other warranties, expressed or implied, oral or written, including, without limitation, any implied warranties of merchantable quality or fitness for a particular purpose.
@@ -64,8 +62,3 @@ Any failure to comply with the terms and conditions of this Agreement will resul
 4. DISCLAIMER OF WARRANTY
 
 THIS SOFTWARE AND THE ACCOMPANYING FILES ARE SOLD "AS IS" AND WITHOUT WARRANTIES AS TO PERFORMANCE OR MERCHANTABILITY OR ANY OTHER WARRANTIES WHETHER EXPRESSED OR IMPLIED. THIS DISCLAIMER CONCERNS ALL FILES GENERATED AND EDITED BY advance-neural-network 1.0.0 AS WELL.
-
-5. CONSENT OF USE OF DATA
-
-You agree that Hussain Mir Ali may collect and use information gathered in any manner as part of the product support services provided to you, if any, related to advance-neural-network 1.0.0.Hussain Mir Ali may also use this information to provide notices to you which may be of use or interest to you.
- 	
