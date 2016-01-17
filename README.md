@@ -1,4 +1,4 @@
-# Advance Neural Network 
+# Advanced Neural Network 
 ###[Author: Hussain Mir Ali]
 An artificial neural network with single hidden layer and multiclass classification. This project has been written in JavaScript. The applications include disease prediction, optimizing workout routine and stock prediction. 
 
@@ -15,9 +15,9 @@ An artificial neural network with single hidden layer and multiclass classificat
 
 ##Installation:
 *  Download the project and unzip it.
-*  Copy the 'advance-neural-network' folder to your node_modules folder in your project directory.
-*  Require it using 'require('advance-neural-network')' in your main JavaScript file.
-*  If you want to reinstall node_modules for this project then run 'sudo npm install -g" in your terminal under the 'advance-neural-network' project directory.
+*  Copy the 'advanced-neural-network' folder to your node_modules folder in your project directory.
+*  Require it using 'require('advanced-neural-network')' in your main JavaScript file.
+*  If you want to reinstall node_modules for this project then run 'sudo npm install -g" in your terminal under the 'advanced-neural-network' project directory.
 
 ##Testing:
 * For unit testing Mocha and Sinon have been used. 
@@ -32,7 +32,7 @@ An artificial neural network with single hidden layer and multiclass classificat
 ###Sample usage:
 
 ```javascript
-var NeuralNetwork = require('advance-neural-network');
+var NeuralNetwork = require('advanced-neural-network');
 var callback_data;
 
 var callback = function (data) {
