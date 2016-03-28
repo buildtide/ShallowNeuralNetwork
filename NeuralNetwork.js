@@ -17,6 +17,7 @@ Copyright (c) 2015-2016 Hussain Mir Ali
  * @param {Function} args.iteration_callback Optional callback that can be used for getting cost and iteration value on every notify count.
  * @param {Number} args.hiddenLayerSize Optional value for number of hidden layer units.
  * @param {Number} args.maximum_iterations Optional maximum iterations to be allowed before the optimization is complete. 
+ * @param {Object} args.optimization_mode Optional optimzation(gradient descent) mode. For batch gradient descent optimization_mode =  {'mode': 0}, for mini-batch gradient descent optimization_mode =  {'mode': 1, 'batch_size': <specify  required size> }  and for stochastic gradient descent optimization_mode =  {'mode': 2}. 
  **/
 
 var NeuralNetwork = function(args) {
@@ -32,6 +33,7 @@ var NeuralNetwork = function(args) {
   this.hiddenLayerSize = args.hiddenLayerSize;
   this.regularization_param = args.regularization_param || 0.01;
   this.learningRate = args.learningRate || 0.5;
+  this.optimization_mode = (args.optimization_mode === undefined)? {'mode': 0}: args.optimization_mode;
   this.maximum_iterations = args.maximum_iterations || 1000;
   this.notify_count = args.notify_count || 100;
 };
@@ -48,6 +50,7 @@ NeuralNetwork.prototype.getInitParams = function() {
     'algorithm_mode': this.algorithm_mode,
     'path': this.path,
     'hiddenLayerSize': this.hiddenLayerSize,
+    'optimization_mode': this.optimization_mode,
     'notify_count': this.notify_count,
     'iteration_callback': this.iteration_callback,
     'threshold': this.threshold,
@@ -123,10 +126,11 @@ NeuralNetwork.prototype.sigmoid_Derivative = function(z) {
  * @param {matrix} X The input matrix representing the features.
  * @param {matrix} Y The output matrix corresponding to training data.
  * @param {Number} algorithm_mode The current algorithm mode (testing: 2, crossvalidating: 1, training: 0).
+ * @param {Number} iteration_count This is the current iteration count in gradient descent.
  * @return {Number} Returns the resultant cost.
  */
-NeuralNetwork.prototype.costFunction = function(X, Y, algorithm_mode) {
-  var J;
+NeuralNetwork.prototype.costFunction = function(X, Y, algorithm_mode, iteration_count) {
+  var J, batch_size;
   var scope = {};
   this.y_result = this.forwardPropagation(X || this.x, undefined, undefined);
   scope.y_result = this.y_result;
@@ -135,6 +139,10 @@ NeuralNetwork.prototype.costFunction = function(X, Y, algorithm_mode) {
   scope.W1 = this.W1;
   scope.W2 = this.W2;
   this.algorithm_mode = algorithm_mode || this.algorithm_mode;
+  
+  if(this.optimization_mode.mode === 1){
+	scope.x = scope.x._data.slice(0, this.optimization_mode.batch_size*iteration_count);
+  }
 
   if (this.algorithm_mode === 0)
     J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval('W1.^2', scope)) + this.MathJS.sum(this.MathJS.eval('W2.^2', scope))); //regularization parameter
@@ -251,7 +259,7 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     this.W1 = this.MathJS.eval('W1 - dJdW1.*rate', scope);
 
     if (x !== undefined && y !== undefined)
-      cost = this.costFunction(x, y);
+      cost = this.costFunction(x, y, undefined, i);
     if (i % this.notify_count === 0 && this.iteration_callback !== undefined) {
       this.iteration_callback.apply(null, [{
         'cost': cost,
@@ -382,7 +390,7 @@ NeuralNetwork.prototype.setWeights = function(path) {
 NeuralNetwork.prototype.cross_validate_network = function(X, Y) {
   console.log("\n Cross Validating...");
   this.algorithm_mode = 1;
-  return this.costFunction(X, Y, undefined);
+  return this.costFunction(X, Y, undefined, undefined);
 };
 
 /**
@@ -396,7 +404,7 @@ NeuralNetwork.prototype.cross_validate_network = function(X, Y) {
 NeuralNetwork.prototype.test_network = function(X, Y) {
   console.log("\n Testing...");
   this.algorithm_mode = 2;
-  return this.costFunction(X, Y, undefined);
+  return this.costFunction(X, Y, undefined, undefined);
 };
 
 module.exports = NeuralNetwork;

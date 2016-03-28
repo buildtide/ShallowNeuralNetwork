@@ -19,6 +19,7 @@ describe('NeuralNetwork', function() {
 		'algorithm_mode': 0 /*This is to specify if  testing:0, cross validating:1 or training:2 data.*/ ,
 		'threshold_value': undefined /*optional threshold value*/ ,
 		'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting*/ ,
+                'optimization_mode': {'mode': 0},
 		'notify_count': 10 /*optional value to execute the callback after every x number of iterations*/ ,
 		'iteration_callback': callback /*optional callback that can be used for getting cost and iteration value on every notify count.*/ ,
 		'maximum_iterations': 1000 /*optional maximum iterations to be allowed*/
@@ -37,6 +38,7 @@ describe('NeuralNetwork', function() {
 		assert.deepStrictEqual(getInitParams.notify_count, 10);
 		assert.deepStrictEqual(getInitParams.maximum_iterations, 1000);
 		assert.deepStrictEqual(getInitParams.iteration_callback, callback);
+		assert.deepStrictEqual(getInitParams.optimization_mode, {'mode': 0});
 	});
 
 	describe('when saving and setting weights', function() {
@@ -137,9 +139,9 @@ describe('NeuralNetwork', function() {
 					if (y_result._data[i][j] !== y_resultRef._data[i][j]) {
 						success = false;
 						break;
-					} else
+					} else{
 						success = true;
-
+					}
 					if (j == y_resultRef.size()[1])
 						j = 0;
 				}
@@ -369,6 +371,51 @@ describe('NeuralNetwork', function() {
 
 			});
 		});
+
+		describe('when optimizing using mini-batch gradient descent.', function() {
+
+			
+		       var nn_mode1 = new NeuralNetwork({
+					'path': path,/*optional path to save the weights*/
+					'hiddenLayerSize': 12,
+					'learningRate': 0.9,
+					'algorithm_mode': 0 /*This is to specify if  testing:0, cross validating:1 or training:2 data.*/ ,
+					'threshold_value': undefined /*optional threshold value*/ ,
+					'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting*/ ,
+					'optimization_mode': {'mode': 1, 'batch_size': 20} /*optional optimization mode for type of gradient descent.*/ ,
+					'notify_count': 10 /*optional value to execute the callback after every x number of iterations*/ ,
+					'iteration_callback': callback /*optional callback that can be used for getting cost and iteration value on every notify count.*/ ,
+					'maximum_iterations': 1000 /*optional maximum iterations to be allowed*/
+				});
+
+		        var getInitParams_mode1 = nn_mode1.getInitParams();
+                    
+
+			it("should correctly set parameters with mode: 1", function() {
+				assert.deepStrictEqual(getInitParams_mode1.path[0], __dirname+'/Test_Weights_Layer1.txt');
+				assert.deepStrictEqual(getInitParams_mode1.path[1], __dirname+'/Test_Weights_Layer2.txt');
+				assert.deepStrictEqual(getInitParams_mode1.learningRate, 0.9);
+				assert.deepStrictEqual(getInitParams_mode1.hiddenLayerSize, 12);
+				assert.deepStrictEqual(getInitParams_mode1.algorithm_mode, 0);
+				assert.deepStrictEqual(getInitParams_mode1.threshold, (1 / mathJS.exp(6)));
+				assert.deepStrictEqual(getInitParams_mode1.regularization_param, 0.01);
+				assert.deepStrictEqual(getInitParams_mode1.notify_count, 10);
+				assert.deepStrictEqual(getInitParams_mode1.maximum_iterations, 1000);
+				assert.deepStrictEqual(getInitParams_mode1.iteration_callback, callback);
+				assert.deepStrictEqual(getInitParams_mode1.optimization_mode, {'mode': 1, 'batch_size': 20});
+			});
+
+
+			it("should successfuly train the neural network.", function() {
+		           var X = (mathJS.random(mathJS.matrix([10, 10]), 0, 1));
+			   var Y = (mathJS.random(mathJS.matrix([10, 3]), 0, 1));
+
+				nn_mode1.train_network(X, Y);
+			});
+
+
+		});
+
 
 	});
 });

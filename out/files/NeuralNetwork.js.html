@@ -99,6 +99,7 @@ Copyright (c) 2015-2016 Hussain Mir Ali
  * @param {Function} args.iteration_callback Optional callback that can be used for getting cost and iteration value on every notify count.
  * @param {Number} args.hiddenLayerSize Optional value for number of hidden layer units.
  * @param {Number} args.maximum_iterations Optional maximum iterations to be allowed before the optimization is complete. 
+ * @param {Object} args.optimization_mode Optional optimzation(gradient descent) mode. For batch gradient descent optimization_mode =  {&#x27;mode&#x27;: 0}, for mini-batch gradient descent optimization_mode =  {&#x27;mode&#x27;: 1, &#x27;batch_size&#x27;: &lt;specify  required size&gt; }  and for stochastic gradient descent optimization_mode =  {&#x27;mode&#x27;: 1}. 
  **/
 
 var NeuralNetwork = function(args) {
@@ -114,6 +115,7 @@ var NeuralNetwork = function(args) {
   this.hiddenLayerSize = args.hiddenLayerSize;
   this.regularization_param = args.regularization_param || 0.01;
   this.learningRate = args.learningRate || 0.5;
+  this.optimization_mode = args.optimization_mode || 0;
   this.maximum_iterations = args.maximum_iterations || 1000;
   this.notify_count = args.notify_count || 100;
 };
@@ -130,6 +132,7 @@ NeuralNetwork.prototype.getInitParams = function() {
     &#x27;algorithm_mode&#x27;: this.algorithm_mode,
     &#x27;path&#x27;: this.path,
     &#x27;hiddenLayerSize&#x27;: this.hiddenLayerSize,
+    &#x27;optimization_mode&#x27;: this.optimization_mode,
     &#x27;notify_count&#x27;: this.notify_count,
     &#x27;iteration_callback&#x27;: this.iteration_callback,
     &#x27;threshold&#x27;: this.threshold,
