@@ -49,7 +49,7 @@ var nn =  new NeuralNetwork({
         'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting*/ ,
         'optimization_mode': {
           'mode': 1,
-          'batch_size': 20
+          'batch_size': 2
         } /*optional optimization mode for type of gradient descent. {mode:1, 'batch_size': <your size>} for mini-batch and {mode: 0} for batch.*/ ,
         'notify_count': 10 /*optional value to execute the callback after every x number of iterations*/ ,
         'iteration_callback': callback /*optional callback that can be used for getting cost and iteration value on every notify count.*/ ,
