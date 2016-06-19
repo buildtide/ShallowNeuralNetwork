@@ -201,6 +201,15 @@ NeuralNetwork.prototype.costFunction = function(X, Y, algorithm_mode) {
  */
 
 NeuralNetwork.prototype.costFunction_Derivative = function(X, Y, W1, W2) {
+  if (this.optimization_mode.mode === 1) {
+
+    var iteration_count = this.batch_iteration_count;
+    var batch_size = this.optimization_mode.batch_size;
+    var X = this.MathJS.matrix(this.x._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
+    var Y = this.MathJS.matrix(this.y._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
+
+  }
+
   this.y_result = this.forwardPropagation(X || this.x, undefined, undefined);
   var scope = {};
   scope.y_result = this.y_result;
