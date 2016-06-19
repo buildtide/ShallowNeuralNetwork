@@ -73,7 +73,7 @@
                         },
                         {
                             "name": "optimization_mode",
-                            "description": "Optional optimzation(gradient descent) mode. For batch gradient descent optimization_mode =  {'mode': 0}, for mini-batch gradient descent optimization_mode =  {'mode': 1, 'batch_size': <specify  required size> }  and for stochastic gradient descent optimization_mode =  {'mode': 1}.",
+                            "description": "Optional optimzation(gradient descent) mode. For batch gradient descent optimization_mode =  {'mode': 0} and for mini-batch gradient descent optimization_mode =  {'mode': 1, 'batch_size': (specify  required size) }.",
                             "type": "Object"
                         }
                     ]
@@ -91,7 +91,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 41,
+            "line": 44,
             "description": "This method returns all the parameters passed to the constructor.",
             "itemtype": "method",
             "name": "getInitParams",
@@ -103,7 +103,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 63,
+            "line": 66,
             "description": "This method serves as the logic for the sigmoid function.",
             "itemtype": "method",
             "name": "sigmoid",
@@ -122,7 +122,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 84,
+            "line": 89,
             "description": "This method is responsible for the forwardPropagation in the Neural Network.",
             "itemtype": "method",
             "name": "forwardPropagation",
@@ -151,7 +151,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 104,
+            "line": 109,
             "description": "This method serves as the logic for the sigmoid function derivative.",
             "itemtype": "method",
             "name": "sigmoid_Derivative",
@@ -170,7 +170,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 122,
+            "line": 127,
             "description": "This method is responsible for the costFunction, i.e. error.",
             "itemtype": "method",
             "name": "costFunction",
@@ -199,7 +199,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 150,
+            "line": 192,
             "description": "This method is responsible for the costFunction_Derivative, i.e. gradient of error with respect to weights.",
             "itemtype": "method",
             "name": "costFunction_Derivative",
@@ -233,7 +233,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 194,
+            "line": 236,
             "description": "This method is responsible for saving the trained weights of the Neural Network to text files at specified path.",
             "itemtype": "method",
             "name": "saveWeights",
@@ -257,7 +257,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 216,
+            "line": 258,
             "description": "This method is responsible for the optimization of weights, i.e. BackPropagation algorithm.",
             "itemtype": "method",
             "name": "gradientDescent",
@@ -291,7 +291,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 277,
+            "line": 320,
             "description": "This method is responsible for creating layers and initializing random weights.",
             "itemtype": "method",
             "name": "train_network",
@@ -315,7 +315,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 309,
+            "line": 352,
             "description": "This contains logic to predict result for a given input after training on data.",
             "itemtype": "method",
             "name": "predict_result",
@@ -334,7 +334,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 324,
+            "line": 367,
             "description": "This method is responsible for setting weights of the Neural Network from a specified path.",
             "itemtype": "method",
             "name": "setWeights",
@@ -353,7 +353,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 377,
+            "line": 420,
             "description": "This method is responsible for producing the cross validation error after training data.",
             "itemtype": "method",
             "name": "cross_validate_network",
@@ -377,7 +377,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 391,
+            "line": 434,
             "description": "This method is responsible for producing the test error after training data.",
             "itemtype": "method",
             "name": "test_network",

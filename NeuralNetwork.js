@@ -17,7 +17,7 @@ Copyright (c) 2015-2016 Hussain Mir Ali
  * @param {Function} args.iteration_callback Optional callback that can be used for getting cost and iteration value on every notify count.
  * @param {Number} args.hiddenLayerSize Optional value for number of hidden layer units.
  * @param {Number} args.maximum_iterations Optional maximum iterations to be allowed before the optimization is complete. 
- * @param {Object} args.optimization_mode Optional optimzation(gradient descent) mode. For batch gradient descent optimization_mode =  {'mode': 0}, for mini-batch gradient descent optimization_mode =  {'mode': 1, 'batch_size': <specify  required size> }  and for stochastic gradient descent optimization_mode =  {'mode': 2}. 
+ * @param {Object} args.optimization_mode Optional optimzation(gradient descent) mode. For batch gradient descent optimization_mode =  {'mode': 0} and for mini-batch gradient descent optimization_mode =  {'mode': 1, 'batch_size': (specify  required size) }. 
  **/
 
 var NeuralNetwork = function(args) {
@@ -27,14 +27,17 @@ var NeuralNetwork = function(args) {
   this.q = require('q');
   this.initArgs = args;
   this.path = args.path || new Array(__dirname + '/data/Weights_Layer1.txt', __dirname + '/data/Weights_Layer2.txt');
-  this.threshold = args.threshold || (1 / this.MathJS.exp(6));
+  this.threshold = args.threshold || (1 / this.MathJS.exp(3));
   this.algorithm_mode = 0;
   this.iteration_callback = args.iteration_callback;
   this.hiddenLayerSize = args.hiddenLayerSize;
   this.regularization_param = args.regularization_param || 0.01;
   this.learningRate = args.learningRate || 0.5;
-  this.optimization_mode = (args.optimization_mode === undefined)? {'mode': 0}: args.optimization_mode;
+  this.optimization_mode = (args.optimization_mode === undefined) ? {
+    'mode': 0
+  } : args.optimization_mode;
   this.maximum_iterations = args.maximum_iterations || 1000;
+  this.batch_iteration_count = 0;
   this.notify_count = args.notify_count || 100;
 };
 
@@ -75,8 +78,10 @@ NeuralNetwork.prototype.sigmoid = function(z) {
       ]) : z
     },
     sigmoid;
-
-  scope.ones = this.MathJS.ones(scope.z.size()[0], scope.z.size()[1]);
+  if (scope.z.size()[1] === undefined)
+    scope.ones = this.MathJS.ones(scope.z.size()[0]);
+  else
+    scope.ones = this.MathJS.ones(scope.z.size()[0], scope.z.size()[1]);
   sigmoid = this.MathJS.eval('(ones+(e.^(z.*-1))).^-1', scope); //1/(1+e^(-z))
   return sigmoid;
 };
@@ -126,28 +131,60 @@ NeuralNetwork.prototype.sigmoid_Derivative = function(z) {
  * @param {matrix} X The input matrix representing the features.
  * @param {matrix} Y The output matrix corresponding to training data.
  * @param {Number} algorithm_mode The current algorithm mode (testing: 2, crossvalidating: 1, training: 0).
- * @param {Number} iteration_count This is the current iteration count in gradient descent.
  * @return {Number} Returns the resultant cost.
  */
-NeuralNetwork.prototype.costFunction = function(X, Y, algorithm_mode, iteration_count) {
+NeuralNetwork.prototype.costFunction = function(X, Y, algorithm_mode) {
   var J, batch_size;
   var scope = {};
-  this.y_result = this.forwardPropagation(X || this.x, undefined, undefined);
-  scope.y_result = this.y_result;
+  var iteration_count;
+
   scope.y = this.MathJS.matrix(Y);
   scope.x = this.MathJS.matrix(X);
   scope.W1 = this.W1;
   scope.W2 = this.W2;
   this.algorithm_mode = algorithm_mode || this.algorithm_mode;
-  
-  if(this.optimization_mode.mode === 1){
-	scope.x = scope.x._data.slice(0, this.optimization_mode.batch_size*iteration_count);
-  }
 
-  if (this.algorithm_mode === 0)
-    J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval('W1.^2', scope)) + this.MathJS.sum(this.MathJS.eval('W2.^2', scope))); //regularization parameter
-  else if (this.algorithm_mode === 1 || this.algorithm_mode === 2)
-    J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]);
+  this.batch_iteration_count++;
+  iteration_count = this.batch_iteration_count;
+
+  if (this.optimization_mode.mode === 1) { //cost for mini-batch gradient descent.
+    batch_size = this.optimization_mode.batch_size;
+
+    scope.x = this.MathJS.matrix(scope.x._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
+    scope.y = this.MathJS.matrix(scope.y._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
+
+    if (iteration_count * this.optimization_mode.batch_size === scope.x.size()[0]) {
+      this.batch_iteration_count = 0;
+    }
+
+    this.y_result = this.forwardPropagation(scope.x, undefined, undefined);
+    scope.y_result = this.y_result;
+
+    if (this.algorithm_mode === 0)
+      J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) / (this.optimization_mode.batch_size) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval('W1.^2', scope)) + this.MathJS.sum(this.MathJS.eval('W2.^2', scope))); //cost with regularization parameter.
+    else if (this.algorithm_mode === 1 || this.algorithm_mode === 2)
+      J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) / (this.optimization_mode.batch_size);
+  } else if (this.optimization_mode.mode === 2 && (iteration_count <= scope.x.size()[0])) { // cost for stochastic gradient descent.
+    scope.x = this.MathJS.matrix(scope.x._data[iteration_count - 1]);
+    scope.y = this.MathJS.matrix(scope.y._data[iteration_count - 1]);
+
+    this.y_result = this.forwardPropagation(scope.x, undefined, undefined);
+    scope.y_result = this.y_result;
+
+    if (this.algorithm_mode === 0)
+      J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval('W1.^2', scope)) + this.MathJS.sum(this.MathJS.eval('W2.^2', scope))); //cost with regularization parameter.
+    else if (this.algorithm_mode === 1 || this.algorithm_mode === 2)
+      J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope));
+  } else if (this.optimization_mode.mode === 0) { //cost with batch gradient descent.
+    this.y_result = this.forwardPropagation(scope.x, undefined, undefined);
+    scope.y_result = this.y_result;
+
+    if (this.algorithm_mode === 0)
+      J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval('W1.^2', scope)) + this.MathJS.sum(this.MathJS.eval('W2.^2', scope))); //cost with regularization parameter.
+    else if (this.algorithm_mode === 1 || this.algorithm_mode === 2)
+      J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]);
+
+  }
 
   return J;
 };
@@ -239,12 +276,13 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     scope = {},
     defered = this.q.defer(),
     path = this.path,
-    i = 0;
+    i = 1;
 
   if (this.algorithm_mode == 0)
     console.log('Training ...\n');
 
-  while (1) {
+  while (true) {
+
     if (x !== undefined && y !== undefined && W1 !== undefined && W2 !== undefined)
       gradient = this.costFunction_Derivative(x, y, W1, W2);
     else
@@ -259,7 +297,7 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     this.W1 = this.MathJS.eval('W1 - dJdW1.*rate', scope);
 
     if (x !== undefined && y !== undefined)
-      cost = this.costFunction(x, y, undefined, i);
+      cost = this.costFunction(x, y, undefined);
     if (i % this.notify_count === 0 && this.iteration_callback !== undefined) {
       this.iteration_callback.apply(null, [{
         'cost': cost,
@@ -390,7 +428,7 @@ NeuralNetwork.prototype.setWeights = function(path) {
 NeuralNetwork.prototype.cross_validate_network = function(X, Y) {
   console.log("\n Cross Validating...");
   this.algorithm_mode = 1;
-  return this.costFunction(X, Y, undefined, undefined);
+  return this.costFunction(X, Y, undefined);
 };
 
 /**
@@ -404,7 +442,7 @@ NeuralNetwork.prototype.cross_validate_network = function(X, Y) {
 NeuralNetwork.prototype.test_network = function(X, Y) {
   console.log("\n Testing...");
   this.algorithm_mode = 2;
-  return this.costFunction(X, Y, undefined, undefined);
+  return this.costFunction(X, Y, undefined);
 };
 
 module.exports = NeuralNetwork;

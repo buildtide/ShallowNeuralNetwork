@@ -40,15 +40,21 @@ var callback = function (data) {
     callback_data = data;
 };
 
-var nn = new NeuralNetwork({
-     'path': undefined, /*optional path to save the weights*/
-     'learningRate':0.9, 
-     'hiddenLayerSize': 9,
-     'threshold_value':undefined /*optional threshold value*/, 
-     'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting*/, 
-     'notify_count':  100/*optional value to execute the callback after every x number of iterations*/,
-     'iteration_callback': callback/*optional callback that can be used for getting cost and iteration value on every notify count.*/,
-     'maximum_iterations': 10000 /*optional maximum iterations to be allowed*/});
+var nn =  new NeuralNetwork({
+        'path': undefined,/*optional path to save the weights*/
+        'hiddenLayerSize': 12,
+        'learningRate': 0.1,
+        'algorithm_mode': 0 /*This is to specify if  testing:0, cross validating:1 or training:2 data.*/ ,
+        'threshold_value': undefined /*optional threshold value*/ ,
+        'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting*/ ,
+        'optimization_mode': {
+          'mode': 1,
+          'batch_size': 20
+        } /*optional optimization mode for type of gradient descent. {mode:1, 'batch_size': <your size>} for mini-batch and {mode: 0} for batch.*/ ,
+        'notify_count': 10 /*optional value to execute the callback after every x number of iterations*/ ,
+        'iteration_callback': callback /*optional callback that can be used for getting cost and iteration value on every notify count.*/ ,
+        'maximum_iterations': 10000 /*optional maximum iterations to be allowed*/
+      });
 
 nn.train_network([
     [1, 0, 1, 1, 1, 1],
