@@ -130,11 +130,16 @@ describe('NeuralNetwork', function() {
     });
 
     it("should correctly run forwardPropagation()", function() {
-
+      
+      var scope = {};
       y_result = nn.forwardPropagation(X, W1, W2);
       z2 = mathJS.multiply(X, W1);
+      scope.z2 = z2;
+      z2 = mathJS.eval('z2+1', scope);
       a2 = nn.sigmoid(z2);
       z3 = mathJS.multiply(a2, W2);
+      scope.z3 = z3;
+      z3 = mathJS.eval('z3+1', scope);
       var y_resultRef = nn.sigmoid(z3);
       var i, j;
       var success = false;

@@ -96,12 +96,16 @@ NeuralNetwork.prototype.sigmoid = function(z) {
  * @return {matrix} Returns the resultant ouput of forwardPropagation.
  */
 NeuralNetwork.prototype.forwardPropagation = function(X, W1, W2) {
-  var y_result, X = this.MathJS.matrix(X) || this.x;
+  var y_result, X = this.MathJS.matrix(X) || this.x, scope = {};
   this.W1 = W1 || this.W1;
   this.W2 = W2 || this.W2;
   this.z2 = this.MathJS.multiply(X, this.W1);
+  scope.z2 = this.z2;
+  this.z2 = this.MathJS.eval('z2+1', scope);
   this.a2 = this.sigmoid(this.z2);
   this.z3 = this.MathJS.multiply(this.a2, this.W2);
+  scope.z3 = this.z3;
+  this.z3 = this.MathJS.eval('z3+1', scope);
   y_result = this.sigmoid(this.z3);
   return y_result;
 };
