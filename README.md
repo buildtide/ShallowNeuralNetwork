@@ -42,7 +42,7 @@ var callback = function (data) {
 var nn =  new window.NeuralNetwork({
         'hiddenLayerSize': 12,
         'learningRate': 0.1,
-        'algorithm_mode': 0 /*This is to specify if  testing:0, cross validating:1 or training:2 data.*/ ,
+        'algorithm_mode': 0 /*This is to specify if  training:0, cross validating:1 or testing:2 data.*/ ,
         'threshold': undefined /*optional threshold value*/ ,
         'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting*/ ,
         'optimization_mode': {
