@@ -3,21 +3,20 @@
 An artificial neural network with single hidden layer and multiclass classification. This project has been written in JavaScript. The applications include disease prediction, optimizing workout routine and stock prediction. 
 
 ##External Librarbies Used:
-* csv-parse License: https://github.com/wdavidw/node-csv-parse/blob/master/LICENSE
 * mathjs License: https://github.com/josdejong/mathjs/blob/master/LICENSE
 * mocha License: https://github.com/mochajs/mocha/blob/master/LICENSE
 * sinon Licencse: https://github.com/sinonjs/sinon/blob/master/LICENSE
 * yuidocjs License: https://github.com/yui/yuidoc/blob/master/LICENSE
 * nodeJS License: https://github.com/nodejs/node/blob/master/LICENSE
+* q License: https://github.com/kriskowal/q/blob/v1/LICENSE
 
 ##Note: 
 * Please perform Feature Scaling and/or Mean Normalization along with random shuffling of data for using this program.
 
 ##Installation:
 *  Download the project and unzip it.
-*  Copy the 'advanced-neural-network' folder to your node_modules folder in your project directory.
-*  Require it using 'require('advanced-neural-network')' in your main JavaScript file.
-*  If you want to reinstall node_modules for this project then run 'sudo npm install -g" in your terminal under the 'advanced-neural-network' project directory.
+*  Copy the 'NeuralNetwork' folder to your project directory.
+
 
 ##Testing:
 * For unit testing Mocha and Sinon have been used. 
@@ -32,7 +31,7 @@ An artificial neural network with single hidden layer and multiclass classificat
 ###Sample usage:
 
 ```javascript
-var NeuralNetwork = require('advanced-neural-network');
+//main.js file
 var callback_data;
 
 var callback = function (data) {
@@ -40,8 +39,7 @@ var callback = function (data) {
     callback_data = data;
 };
 
-var nn =  new NeuralNetwork({
-        'path': undefined,/*optional path to save the weights*/
+var nn =  new window.NeuralNetwork({
         'hiddenLayerSize': 12,
         'learningRate': 0.1,
         'algorithm_mode': 0 /*This is to specify if  testing:0, cross validating:1 or training:2 data.*/ ,
@@ -82,6 +80,21 @@ console.log(nn.test_network([
     [0, 1, 0, 0, 1, 0]],
     [[0,1,1],
     [1,0,0]]))).then(console.log(nn.predict_result([[1,0,0,1,0,1]])));  
+
+*/
+```
+```
+<!--index.html-->
+<!doctype html>
+<html>
+  <head>
+  </head>
+  <body >
+        <script src="NeuralNetwork/lib/q.js"></script>
+        <script src="NeuralNetwork/lib/math.js"></script>
+        <script src="NeuralNetwork/NeuralNetwork.js"></script>
+</body>
+</html>
 
 */
 ```

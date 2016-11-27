@@ -6,15 +6,36 @@ var parse = require('csv-parse');
 
 describe('NeuralNetwork', function() {
 
-  var callback_data, path = new Array(__dirname + "/Test_Weights_Layer1.txt", __dirname + "/Test_Weights_Layer2.txt");
+  var callback_data;
+
+  global.localStorage = (function() {
+    var storage = {};
+
+    return {
+      setItem: function(key, value) {
+        storage[key] = value || '';
+      },
+      getItem: function(key) {
+        return storage[key] || null;
+      },
+      removeItem: function(key) {
+        delete storage[key];
+      },
+      get length() {
+        return Object.keys(storage).length;
+      },
+      key: function(i) {
+        var keys = Object.keys(storage);
+        return keys[i] || null;
+      }
+    };
+  })();
 
   var callback = function(data) {
     callback_data = data;
   };
 
   var nn = new NeuralNetwork({
-    'path': path,
-    /*optional path to save the weights*/
     'hiddenLayerSize': 12,
     'learningRate': 0.9,
     'algorithm_mode': 0 /*This is to specify if  testing:0, cross validating:1 or training:2 data.*/ ,
@@ -31,8 +52,6 @@ describe('NeuralNetwork', function() {
   var getInitParams = nn.getInitParams();
 
   it("should correctly set parameters", function() {
-    assert.deepStrictEqual(getInitParams.path[0], __dirname + '/Test_Weights_Layer1.txt');
-    assert.deepStrictEqual(getInitParams.path[1], __dirname + '/Test_Weights_Layer2.txt');
     assert.deepStrictEqual(getInitParams.learningRate, 0.9);
     assert.deepStrictEqual(getInitParams.hiddenLayerSize, 12);
     assert.deepStrictEqual(getInitParams.algorithm_mode, 0);
@@ -48,22 +67,7 @@ describe('NeuralNetwork', function() {
 
   describe('when saving and setting weights', function() {
 
-    var W1 = (mathJS.random(mathJS.matrix([9, 10]), -5, 5)),
-      W2 = (mathJS.random(mathJS.matrix([10, 3]), -5, 5));
-
-    it('should successfuly save weights', function() {
-      assert.equal(nn.saveWeights([W1, W2], path), true);
-    });
-
-    it('should successfuly set weights', function(done) {
-      var success = true;
-      nn.setWeights(path).then(function(promise_data) {
-        assert.equal(promise_data.success, true);
-        done();
-      });
-
-    });
-
+    
   });
 
   describe('when training', function() {
@@ -386,8 +390,6 @@ describe('NeuralNetwork', function() {
 
 
       var nn_mode1 = new NeuralNetwork({
-        'path': path,
-        /*optional path to save the weights*/
         'hiddenLayerSize': 12,
         'learningRate': 0.9,
         'algorithm_mode': 0 /*This is to specify if  testing:0, cross validating:1 or training:2 data.*/ ,
@@ -406,8 +408,7 @@ describe('NeuralNetwork', function() {
 
 
       it("should correctly set parameters with mode: 1", function() {
-        assert.deepStrictEqual(getInitParams_mode1.path[0], __dirname + '/Test_Weights_Layer1.txt');
-        assert.deepStrictEqual(getInitParams_mode1.path[1], __dirname + '/Test_Weights_Layer2.txt');
+       
         assert.deepStrictEqual(getInitParams_mode1.learningRate, 0.9);
         assert.deepStrictEqual(getInitParams_mode1.hiddenLayerSize, 12);
         assert.deepStrictEqual(getInitParams_mode1.algorithm_mode, 0);

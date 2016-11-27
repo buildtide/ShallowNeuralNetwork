@@ -3,13 +3,16 @@ Copyright (c) 2015-2016 Hussain Mir Ali
 **/
 "use strict";
 
+var window_object = (function(g){
+      return g;
+  }(this));
+
 /**
  * The NeuralNetwork class contains all the necessary logic to train data for multiclass classification using single layer Neural Network.
  *
  * @class NeuralNetwork
  * @constructor
  * @param {Object} args Contains all the necessary parameters for the neural network as listed below.
- * @param {String} args.path optional Path to save the weights.
  * @param {Number} args.learningRate Learning rate for BackPropogation.
  * @param {Number} args.threshold_value Optional threshold value for error. 
  * @param {Number} args.regularization_parameter Optional regularization parameter to prevent overfitting. 
@@ -21,12 +24,15 @@ Copyright (c) 2015-2016 Hussain Mir Ali
  **/
 
 var NeuralNetwork = function(args) {
-  this.fs = require('fs');
-  this.parse = require('csv-parse');
-  this.MathJS = require('mathjs');
-  this.q = require('q');
+    if(Object.keys(window_object).length === 0){
+        this.MathJS = require('mathjs');
+        this.q = require('q');
+    }
+    else{
+        this.MathJS = math;
+        this.q = Q;
+    }
   this.initArgs = args;
-  this.path = args.path || new Array(__dirname + '/data/Weights_Layer1.txt', __dirname + '/data/Weights_Layer2.txt');
   this.threshold = args.threshold || (1 / this.MathJS.exp(3));
   this.algorithm_mode = 0;
   this.iteration_callback = args.iteration_callback;
@@ -51,7 +57,6 @@ var NeuralNetwork = function(args) {
 NeuralNetwork.prototype.getInitParams = function() {
   return {
     'algorithm_mode': this.algorithm_mode,
-    'path': this.path,
     'hiddenLayerSize': this.hiddenLayerSize,
     'optimization_mode': this.optimization_mode,
     'notify_count': this.notify_count,
@@ -247,23 +252,20 @@ NeuralNetwork.prototype.costFunction_Derivative = function(X, Y, W1, W2) {
 };
 
 /**
- *This method is responsible for saving the trained weights of the Neural Network to text files at specified path.
+ *This method is responsible for saving the trained weights of the Neural Network.
  *
  * @method saveWeights 
  * @param {Array} weights The weights of the layer1 and layer2 of the Neural Network.
- * @param {String} path The path at wich the weights are to be saved.
  * @return {Boolean} Returns true after succesfuly saving the weights.
  */
-NeuralNetwork.prototype.saveWeights = function(weights, path) {
+NeuralNetwork.prototype.saveWeights = function(weights) {
   var defered = this.q.defer();
-
-  try {
-    this.fs.writeFileSync(path[0], weights[0].toString().replace(/\]\,\s\[/g, "\n").replace("[[", "").replace("]]", ""));
-    this.fs.writeFileSync(path[1], weights[1].toString().replace(/\]\,\s\[/g, "\n").replace("[[", "").replace("]]", ""));
-  } catch (e) {
-    return false;
+  if(Object.keys(window_object).length === 0){
+    global.localStorage.setItem("Weights", weights);
   }
-
+  else{
+    localStorage.setItem("Weights", weights);
+  }
   console.log("\nWeights were successfuly saved.");
   return true;
 };
@@ -288,7 +290,6 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     cost,
     scope = {},
     defered = this.q.defer(),
-    path = this.path,
     i = 1;
 
   if (this.algorithm_mode == 0)
@@ -321,7 +322,7 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     }
     i++;
     if (i > this.maximum_iterations || cost <= (this.threshold)) {
-      this.saveWeights([this.W1, this.W2], path);
+      this.saveWeights([this.W1, this.W2]);
       defered.resolve([cost, i]);
       break;
     }
@@ -372,62 +373,34 @@ NeuralNetwork.prototype.train_network = function(X, Y) {
 
 NeuralNetwork.prototype.predict_result = function(X) {
   var y_result;
-  this.setWeights(this.path);
+  this.setWeights();
   y_result = this.forwardPropagation(X);
   return y_result;
 };
 
 /**
- *This method is responsible for setting weights of the Neural Network from a specified path.
+ *This method is responsible for setting weights of the Neural Network.
  *
  * @method setWeights 
- * @param {String} path The path where the trained weights are to be found.
  * @return {Object} Returns a resolved promise after successfuly setting weights.
  */
-NeuralNetwork.prototype.setWeights = function(path) {
+NeuralNetwork.prototype.setWeights = function() {
   var contents_layer1, contents_layer2;
-  var dataA = this.fs.readFileSync(path[0], 'utf8');
-  var dataB = this.fs.readFileSync(path[1], 'utf8');
   var self = this,
     success;
 
-  return (function() {
-    var defered = self.q.defer();
-    self.parse(dataA, {}, function(err, array) {
-      if (err) {
-        throw (err);
-      }
-      defered.resolve();
-      contents_layer1 = self.MathJS.matrix(array);
-    })
+  var self = this;
+  var weights;
+    if(Object.keys(window_object).length === 0){
+       weights = global.localStorage.getItem("Weights");
+    }else{
+       weights = localStorage.getItem("Weights");
+     }
 
-    return defered.promise;
-  })().then(
-    function() {
+     self.W1 = weights[0];
+     self.W2 = weights[1];
 
-      var defered = self.q.defer();
-
-      self.parse(dataB, {}, function(err, array) {
-        if (err) {
-          throw (err);
-        }
-        contents_layer2 = self.MathJS.matrix(array);
-        if (contents_layer1 !== undefined && contents_layer2 !== undefined) {
-          self.W1 = (contents_layer1);
-          self.W2 = (contents_layer2);
-          defered.resolve({
-            'success': true
-          });
-        } else {
-          defered.reject({
-            'success': false
-          });
-        }
-      });
-
-      return defered.promise;
-
-    });
+     return [self.W1, self.W2];
 };
 
 /**
@@ -458,4 +431,8 @@ NeuralNetwork.prototype.test_network = function(X, Y) {
   return this.costFunction(X, Y, undefined);
 };
 
-module.exports = NeuralNetwork;
+if(Object.keys(window_object).length === 0){
+    module.exports = NeuralNetwork;
+}else{
+    window['Autoencoder'] = NeuralNetwork;
+}
