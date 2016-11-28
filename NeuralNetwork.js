@@ -422,7 +422,7 @@ NeuralNetwork.prototype.setWeights = function() {
 NeuralNetwork.prototype.cross_validate_network = function(X, Y) {
   console.log("\n Cross Validating...");
   this.algorithm_mode = 1;
-  return this.gradientDescent(X, Y, undefined, undefined);
+  return this.gradientDescent(this.MathJS.matrix(X), this.MathJS.matrix(Y), undefined, undefined);
 };
 
 /**
@@ -436,7 +436,7 @@ NeuralNetwork.prototype.cross_validate_network = function(X, Y) {
 NeuralNetwork.prototype.test_network = function(X, Y) {
   console.log("\n Testing...");
   this.algorithm_mode = 2;
-  return this.gradientDescent(X, Y, undefined, undefined);
+  return this.gradientDescent(this.MathJS.matrix(X), this.MathJS.matrix(Y), undefined, undefined);
 };
 
 if(Object.keys(window_object).length === 0){

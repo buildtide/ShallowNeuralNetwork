@@ -51,7 +51,7 @@ var nn =  new window.NeuralNetwork({
         } /*optional optimization mode for type of gradient descent. {mode:1, 'batch_size': <your size>} for mini-batch and {mode: 0} for batch.*/ ,
         'notify_count': 10 /*optional value to execute the callback after every x number of iterations*/ ,
         'iteration_callback': callback /*optional callback that can be used for getting cost and iteration value on every notify count.*/ ,
-        'maximum_iterations': 10000 /*optional maximum iterations to be allowed*/
+        'maximum_iterations': 100 /*optional maximum iterations to be allowed*/
       });
 
 nn.train_network([
@@ -71,15 +71,23 @@ nn.train_network([
 ]).then(
 console.log(nn.cross_validate_network([   
     [1, 1, 1, 1, 0, 1],
+    [0, 1, 0, 0, 1, 0],
+    [1, 1, 1, 1, 0, 1],
     [0, 1, 0, 0, 1, 0]],[
+    [1,1,1],
+    [1,0,1],
     [1,1,1],
     [1,0,1]]
     ))).then(
 console.log(nn.test_network([
     [1, 1, 1, 1, 0, 1],
-    [0, 1, 0, 0, 1, 0]],
-    [[0,1,1],
-    [1,0,0]]))).then(console.log(nn.predict_result([[1,0,0,1,0,1]])));  
+    [0, 1, 0, 0, 1, 0],
+    [1, 1, 1, 1, 0, 1],
+    [0, 1, 0, 0, 1, 0]],[
+    [1,1,1],
+    [1,0,1],
+    [1,1,1],
+    [1,0,1]]))).then(console.log(nn.predict_result([[1,0,0,1,0,1]])));  
 
 */
 ```
