@@ -67,7 +67,18 @@ describe('NeuralNetwork', function() {
 
   describe('when saving and setting weights', function() {
 
-    
+    var W1 = (mathJS.random(mathJS.matrix([9, 10]), -5, 5)),
+      W2 = (mathJS.random(mathJS.matrix([10, 3]), -5, 5));
+
+    it('should successfuly save weights', function() {
+      nn.saveWeights([W1, W2]);
+      assert.deepStrictEqual([JSON.parse(global.localStorage.getItem("Weights"))[0].data, JSON.parse(global.localStorage.getItem("Weights"))[1].data], [W1._data, W2._data]);
+    });
+
+    it('should successfuly set weights', function(done) {
+       assert.deepStrictEqual(nn.setWeights(),[W1._data, W2._data]);
+       done();
+    });
   });
 
   describe('when training', function() {
@@ -210,8 +221,10 @@ describe('NeuralNetwork', function() {
       var dJdW2 = mathJS.multiply(mathJS.transpose(a2), del_3);
       scope.dJdW2 = dJdW2;
       scope.regularization_term_dJdW2 = mathJS.eval('W2.*regularization_param', scope);
-      dJdW2 = mathJS.eval('dJdW2.*(1/m) + regularization_term_dJdW2', scope);
-
+      if (nn.getInitParams().algorithm_mode === 0)
+       dJdW2 = mathJS.eval('dJdW2.*(1/m) + regularization_term_dJdW2', scope);
+      else  if (nn.getInitParams().algorithm_mode === 1 || nn.getInitParams().algorithm_mode === 2 )
+       dJdW2 = mathJS.eval('dJdW2.*(1/m)', scope);
       scope.arrA = mathJS.multiply(del_3, mathJS.transpose(W2));
       scope.arrB = nn.sigmoid_Derivative(z2);
 
@@ -219,8 +232,10 @@ describe('NeuralNetwork', function() {
       var dJdW1 = mathJS.multiply(mathJS.transpose(X), del_2);
       scope.dJdW1 = dJdW1;
       scope.regularization_term_dJdW1 = mathJS.eval('W1.*regularization_param', scope);
-      dJdW1 = mathJS.eval('dJdW1.*(1/m) + regularization_term_dJdW1', scope);
-
+      if (nn.getInitParams().algorithm_mode === 0)
+       dJdW1 = mathJS.eval('dJdW1.*(1/m) + regularization_term_dJdW1', scope);
+      else  if (nn.getInitParams().algorithm_mode === 1 || nn.getInitParams().algorithm_mode === 2 )
+       dJdW1 = mathJS.eval('dJdW1.*(1/m)', scope);
       var dJdWRef = nn.costFunction_Derivative(X, Y, W1, W2);
       var i, j;
 
@@ -350,9 +365,9 @@ describe('NeuralNetwork', function() {
 
     describe('when testing', function() {
 
-      it("should call costFunction() and set algorithm_mode to 2", function() {
+      it("should call gradientDescent() and set algorithm_mode to 2", function() {
         var success = true;
-        var spy = sinon.spy(nn, "costFunction");
+        var spy = sinon.spy(nn, "gradientDescent");
         spy.withArgs(X, Y, undefined);
         var result = nn.test_network(X, Y);
         var params = nn.getInitParams();
@@ -361,17 +376,17 @@ describe('NeuralNetwork', function() {
           success = false;
         if (!spy.calledOnce)
           success = false;
-        spy.restore();
 
-        assert.deepStrictEqual(success, true);
+        spy.restore();
+        assert.strictEqual(success, true);
       });
     });
 
     describe('when cross validating', function() {
 
-      it("should call costFunction() and set algorithm_mode to 1", function() {
+      it("should call gradientDescent() and set algorithm_mode to 1", function() {
         var success = true;
-        var spy = sinon.spy(nn, "costFunction");
+        var spy = sinon.spy(nn, "gradientDescent");
         spy.withArgs(X, Y, undefined);
         var result = nn.cross_validate_network(X, Y);
         var params = nn.getInitParams();
@@ -381,7 +396,7 @@ describe('NeuralNetwork', function() {
         if (!spy.calledOnce)
           success = false;
         spy.restore();
-        assert.deepStrictEqual(success, true);
+        assert.strictEqual(success, true);
 
       });
     });
