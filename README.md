@@ -101,6 +101,8 @@ console.log(nn.test_network([
         <script src="NeuralNetwork/lib/q.js"></script>
         <script src="NeuralNetwork/lib/math.js"></script>
         <script src="NeuralNetwork/NeuralNetwork.js"></script>
+         <!--Include the main.js file where you use the algorithm.-->
+        <script src="main.js"></script>
 </body>
 </html>
 
