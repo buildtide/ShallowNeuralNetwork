@@ -442,5 +442,5 @@ NeuralNetwork.prototype.test_network = function(X, Y) {
 if(Object.keys(window_object).length === 0){
     module.exports = NeuralNetwork;
 }else{
-    window['Autoencoder'] = NeuralNetwork;
+    window['NeuralNetwork'] = NeuralNetwork;
 }

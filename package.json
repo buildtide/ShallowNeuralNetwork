@@ -1,5 +1,5 @@
 {
-  "name": "advanced-neural-network",
+  "name": "shallow-neural-network",
   "version": "1.0.6",
   "description": "Artificial neural network for data prediction.",
   "main": "NeuralNetwork.js",

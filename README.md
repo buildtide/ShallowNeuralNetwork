@@ -1,4 +1,4 @@
-# Advanced Neural Network 
+# Shallow Neural Network 
 ###[Author: Hussain Mir Ali]
 An artificial neural network with single hidden layer and multiclass classification. This project has been written in JavaScript. The applications include disease prediction, optimizing workout routine and stock prediction. 
 
@@ -98,9 +98,9 @@ console.log(nn.test_network([
   <head>
   </head>
   <body >
-        <script src="NeuralNetwork/lib/q.js"></script>
-        <script src="NeuralNetwork/lib/math.js"></script>
-        <script src="NeuralNetwork/NeuralNetwork.js"></script>
+        <script src="neuralnetwork/lib/q.js"></script>
+        <script src="neuralnetwork/lib/math.js"></script>
+        <script src="neuralnetwork/NeuralNetwork.js"></script>
          <!--Include the main.js file where you use the algorithm.-->
         <script src="main.js"></script>
 </body>
