@@ -187,14 +187,13 @@ describe('NeuralNetwork', function() {
       };
       var success = true;
 
-      var J1 = mathJS.sum(mathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]),
-        J2 = mathJS.sum(mathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]) + (getInitParams.regularization_param / 2) * (mathJS.sum(mathJS.eval('W1.^2', scope)) + mathJS.sum(mathJS.eval('W2.^2', scope))); //regularization parameter
+      var J1 = mathJS.sum(mathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]) + (getInitParams.regularization_param / 2) * (mathJS.sum(mathJS.eval('W1.^2', scope)) + mathJS.sum(mathJS.eval('W2.^2', scope))); //regularization parameter
 
       var cost1 = nn.costFunction(X, Y, 0);
       var cost2 = nn.costFunction(X, Y, 1);
       var cost3 = nn.costFunction(X, Y, 2);
 
-      if (cost1 !== J2)
+      if (cost1 !== J1)
         success = false;
       if (cost2 !== J1 || cost3 !== J1)
         success = false;
@@ -221,10 +220,8 @@ describe('NeuralNetwork', function() {
       var dJdW2 = mathJS.multiply(mathJS.transpose(a2), del_3);
       scope.dJdW2 = dJdW2;
       scope.regularization_term_dJdW2 = mathJS.eval('W2.*regularization_param', scope);
-      if (nn.getInitParams().algorithm_mode === 0)
-       dJdW2 = mathJS.eval('dJdW2.*(1/m) + regularization_term_dJdW2', scope);
-      else  if (nn.getInitParams().algorithm_mode === 1 || nn.getInitParams().algorithm_mode === 2 )
-       dJdW2 = mathJS.eval('dJdW2.*(1/m)', scope);
+      dJdW2 = mathJS.eval('dJdW2.*(1/m) + regularization_term_dJdW2', scope);
+
       scope.arrA = mathJS.multiply(del_3, mathJS.transpose(W2));
       scope.arrB = nn.sigmoid_Derivative(z2);
 
@@ -232,10 +229,8 @@ describe('NeuralNetwork', function() {
       var dJdW1 = mathJS.multiply(mathJS.transpose(X), del_2);
       scope.dJdW1 = dJdW1;
       scope.regularization_term_dJdW1 = mathJS.eval('W1.*regularization_param', scope);
-      if (nn.getInitParams().algorithm_mode === 0)
-       dJdW1 = mathJS.eval('dJdW1.*(1/m) + regularization_term_dJdW1', scope);
-      else  if (nn.getInitParams().algorithm_mode === 1 || nn.getInitParams().algorithm_mode === 2 )
-       dJdW1 = mathJS.eval('dJdW1.*(1/m)', scope);
+      dJdW1 = mathJS.eval('dJdW1.*(1/m) + regularization_term_dJdW1', scope);
+
       var dJdWRef = nn.costFunction_Derivative(X, Y, W1, W2);
       var i, j;
 
