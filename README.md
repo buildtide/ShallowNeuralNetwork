@@ -15,7 +15,7 @@ An artificial neural network with single hidden layer and multiclass classificat
 
 ##Installation:
 *  Download the project and unzip it.
-*  Copy the 'NeuralNetwork' folder to your project directory.
+*  Copy the 'neuralnetwork' folder to your project directory.
 
 ###Sample usage:
 
