@@ -85,9 +85,9 @@ Copyright (c) 2015-2016 Hussain Mir Ali
 **/
 &quot;use strict&quot;;
 
-var window_object = (function(g){
-      return g;
-  }(this));
+var window_object = (function(g) {
+  return g;
+}(this));
 
 /**
  * The NeuralNetwork class contains all the necessary logic to train data for multiclass classification using single layer Neural Network.
@@ -106,14 +106,13 @@ var window_object = (function(g){
  **/
 
 var NeuralNetwork = function(args) {
-    if(Object.keys(window_object).length === 0){
-        this.MathJS = require(&#x27;mathjs&#x27;);
-        this.q = require(&#x27;q&#x27;);
-    }
-    else{
-        this.MathJS = math;
-        this.q = Q;
-    }
+  if (Object.keys(window_object).length === 0) {
+    this.MathJS = require(&#x27;mathjs&#x27;);
+    this.q = require(&#x27;q&#x27;);
+  } else {
+    this.MathJS = math;
+    this.q = Q;
+  }
   this.initArgs = args;
   this.threshold = args.threshold || (1 / this.MathJS.exp(3));
   this.algorithm_mode = 0;
@@ -180,19 +179,25 @@ NeuralNetwork.prototype.sigmoid = function(z) {
  * @param {matrix} X The input matrix representing the features.
  * @param {matrix} W1 The matrix representing the weights for layer 1.
  * @param {matrix} W2 The matrix representing the weights for layer 2.
+ * @param {matrix} bias_l1 The matrix representing the bias for layer 1.
+ * @param {matrix} bias_l2 The matrix representing the bias for layer 2.
  * @return {matrix} Returns the resultant ouput of forwardPropagation.
  */
-NeuralNetwork.prototype.forwardPropagation = function(X, W1, W2) {
-  var y_result, X = this.MathJS.matrix(X) || this.x, scope = {};
+NeuralNetwork.prototype.forwardPropagation = function(X, W1, W2, bias_l1, bias_l2) {
+  var y_result, X = X || this.x,
+    scope = {};
   this.W1 = W1 || this.W1;
   this.W2 = W2 || this.W2;
   this.z2 = this.MathJS.multiply(X, this.W1);
   scope.z2 = this.z2;
-  this.z2 = this.MathJS.eval(&#x27;z2+1&#x27;, scope);
+  scope.bias_l1 = this.bias_l1 || bias_l1;
+  scope.bias_l2 = this.bias_l2 || bias_l2;
+
+  this.z2 = this.MathJS.eval(&#x27;z2+bias_l1&#x27;, scope);
   this.a2 = this.sigmoid(this.z2);
   this.z3 = this.MathJS.multiply(this.a2, this.W2);
   scope.z3 = this.z3;
-  this.z3 = this.MathJS.eval(&#x27;z3+1&#x27;, scope);
+  this.z3 = this.MathJS.eval(&#x27;z3+bias_l2&#x27;, scope);
   y_result = this.sigmoid(this.z3);
   return y_result;
 };
@@ -248,33 +253,23 @@ NeuralNetwork.prototype.costFunction = function(X, Y, algorithm_mode) {
       this.batch_iteration_count = 0;
     }
 
-    this.y_result = this.forwardPropagation(scope.x, undefined, undefined);
+    this.y_result = this.forwardPropagation(scope.x, undefined, undefined, undefined, undefined);
     scope.y_result = this.y_result;
 
-    if (this.algorithm_mode === 0)
-      J = this.MathJS.sum(this.MathJS.eval(&#x27;0.5*((y-y_result).^2)&#x27;, scope)) / (this.optimization_mode.batch_size) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval(&#x27;W1.^2&#x27;, scope)) + this.MathJS.sum(this.MathJS.eval(&#x27;W2.^2&#x27;, scope))); //cost with regularization parameter.
-    else if (this.algorithm_mode === 1 || this.algorithm_mode === 2)
-      J = this.MathJS.sum(this.MathJS.eval(&#x27;0.5*((y-y_result).^2)&#x27;, scope)) / (this.optimization_mode.batch_size);
+    J = this.MathJS.sum(this.MathJS.eval(&#x27;0.5*((y-y_result).^2)&#x27;, scope)) / (this.optimization_mode.batch_size) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval(&#x27;W1.^2&#x27;, scope)) + this.MathJS.sum(this.MathJS.eval(&#x27;W2.^2&#x27;, scope))); //cost with regularization parameter.
   } else if (this.optimization_mode.mode === 2 &amp;&amp; (iteration_count &lt;= scope.x.size()[0])) { // cost for stochastic gradient descent.
     scope.x = this.MathJS.matrix(scope.x._data[iteration_count - 1]);
     scope.y = this.MathJS.matrix(scope.y._data[iteration_count - 1]);
 
-    this.y_result = this.forwardPropagation(scope.x, undefined, undefined);
+    this.y_result = this.forwardPropagation(scope.x, undefined, undefined, undefined, undefined);
     scope.y_result = this.y_result;
 
-    if (this.algorithm_mode === 0)
-      J = this.MathJS.sum(this.MathJS.eval(&#x27;0.5*((y-y_result).^2)&#x27;, scope)) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval(&#x27;W1.^2&#x27;, scope)) + this.MathJS.sum(this.MathJS.eval(&#x27;W2.^2&#x27;, scope))); //cost with regularization parameter.
-    else if (this.algorithm_mode === 1 || this.algorithm_mode === 2)
-      J = this.MathJS.sum(this.MathJS.eval(&#x27;0.5*((y-y_result).^2)&#x27;, scope));
+    J = this.MathJS.sum(this.MathJS.eval(&#x27;0.5*((y-y_result).^2)&#x27;, scope)) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval(&#x27;W1.^2&#x27;, scope)) + this.MathJS.sum(this.MathJS.eval(&#x27;W2.^2&#x27;, scope))); //cost with regularization parameter.
   } else if (this.optimization_mode.mode === 0) { //cost with batch gradient descent.
-    this.y_result = this.forwardPropagation(scope.x, undefined, undefined);
+    this.y_result = this.forwardPropagation(scope.x, undefined, undefined, undefined, undefined);
     scope.y_result = this.y_result;
 
-    if (this.algorithm_mode === 0)
-      J = this.MathJS.sum(this.MathJS.eval(&#x27;0.5*((y-y_result).^2)&#x27;, scope)) / (scope.x.size()[0]) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval(&#x27;W1.^2&#x27;, scope)) + this.MathJS.sum(this.MathJS.eval(&#x27;W2.^2&#x27;, scope))); //cost with regularization parameter.
-    else if (this.algorithm_mode === 1 || this.algorithm_mode === 2)
-      J = this.MathJS.sum(this.MathJS.eval(&#x27;0.5*((y-y_result).^2)&#x27;, scope)) / (scope.x.size()[0]);
-
+    J = this.MathJS.sum(this.MathJS.eval(&#x27;0.5*((y-y_result).^2)&#x27;, scope)) / (scope.x.size()[0]) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval(&#x27;W1.^2&#x27;, scope)) + this.MathJS.sum(this.MathJS.eval(&#x27;W2.^2&#x27;, scope))); //cost with regularization parameter.
   }
 
   return J;
@@ -294,6 +289,9 @@ NeuralNetwork.prototype.costFunction = function(X, Y, algorithm_mode) {
 NeuralNetwork.prototype.costFunction_Derivative = function(X, Y, W1, W2) {
   if (this.optimization_mode.mode === 1) {
 
+    this.x = X || this.x;
+    this.y = Y || this.y;
+
     var iteration_count = this.batch_iteration_count;
     var batch_size = this.optimization_mode.batch_size;
     var X = this.MathJS.matrix(this.x._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
@@ -301,11 +299,13 @@ NeuralNetwork.prototype.costFunction_Derivative = function(X, Y, W1, W2) {
 
   }
 
-  this.y_result = this.forwardPropagation(X || this.x, undefined, undefined);
+  this.x = X || this.x;
+  this.y_result = this.forwardPropagation(this.x, undefined, undefined);
   var scope = {};
   scope.y_result = this.y_result;
   scope.y = Y || this.y;
   scope.x = X || this.x;
+
   scope.diff = this.MathJS.eval(&#x27;-(y-y_result)&#x27;, scope);
   scope.sigmoid_Derivative_z3 = this.sigmoid_Derivative(this.z3);
   scope.regularization_param = this.regularization_param;
@@ -317,6 +317,7 @@ NeuralNetwork.prototype.costFunction_Derivative = function(X, Y, W1, W2) {
   var dJdW2 = this.MathJS.multiply(this.MathJS.transpose(this.a2), del_3);
   scope.dJdW2 = dJdW2;
   scope.regularization_term_dJdW2 = this.MathJS.eval(&#x27;W2.*regularization_param&#x27;, scope);
+
   dJdW2 = this.MathJS.eval(&#x27;dJdW2.*(1/m) + regularization_term_dJdW2&#x27;, scope);
 
   scope.arrA = this.MathJS.multiply(del_3, this.MathJS.transpose(this.W2));
@@ -327,9 +328,10 @@ NeuralNetwork.prototype.costFunction_Derivative = function(X, Y, W1, W2) {
 
   scope.dJdW1 = dJdW1;
   scope.regularization_term_dJdW1 = this.MathJS.eval(&#x27;W1.*regularization_param&#x27;, scope);
+
   dJdW1 = this.MathJS.eval(&#x27;dJdW1.*(1/m) + regularization_term_dJdW1&#x27;, scope);
 
-  return [dJdW1, dJdW2];
+  return [dJdW1, dJdW2, del_2, del_3];
 
 };
 
@@ -342,15 +344,27 @@ NeuralNetwork.prototype.costFunction_Derivative = function(X, Y, W1, W2) {
  */
 NeuralNetwork.prototype.saveWeights = function(weights) {
   var defered = this.q.defer();
-  if(Object.keys(window_object).length === 0){
-    global.localStorage.setItem(&quot;Weights&quot;, weights);
-  }
-  else{
-    localStorage.setItem(&quot;Weights&quot;, weights);
+  if (Object.keys(window_object).length === 0) {
+    global.localStorage.setItem(&quot;Weights&quot;, JSON.stringify(weights));
+  } else {
+    localStorage.setItem(&quot;Weights&quot;, JSON.stringify(weights));
   }
   console.log(&quot;\nWeights were successfuly saved.&quot;);
   return true;
 };
+
+/**
+ *This method is responsible for setting bias for layers 1 and 2.
+ *
+ * @method setBias 
+ * @param {Number} bias_l1 The bias for layer1.
+ * @param {Number} bias_l2 The bias for layer 2.
+ */
+NeuralNetwork.prototype.setBias = function(bias_l1, bias_l2) {
+  this.bias_l1 = bias_l1;
+  this.bias_l2 = bias_l2;  
+};
+
 
 /**
  *This method is responsible for the optimization of weights, i.e. BackPropagation algorithm.
@@ -382,15 +396,21 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     if (x !== undefined &amp;&amp; y !== undefined &amp;&amp; W1 !== undefined &amp;&amp; W2 !== undefined)
       gradient = this.costFunction_Derivative(x, y, W1, W2);
     else
-      gradient = this.costFunction_Derivative(undefined, undefined, undefined, undefined);
+      gradient = this.costFunction_Derivative(x, y, undefined, undefined);
     scope.W1 = W1 || this.W1;
     scope.W2 = W2 || this.W2;
     scope.rate = this.learningRate;
     scope.dJdW1 = gradient[0];
     scope.dJdW2 = gradient[1];
+    scope.bias_l1 = this.bias_l1;
+    scope.bias_l2 = this.bias_l2;
+    scope.del_3 = gradient[3];
+    scope.del_2 = gradient[2];
 
     this.W2 = this.MathJS.eval(&#x27;W2 - dJdW2.*rate&#x27;, scope);
     this.W1 = this.MathJS.eval(&#x27;W1 - dJdW1.*rate&#x27;, scope);
+    this.bias_l1 = this.MathJS.eval(&#x27;bias_l1-del_2&#x27;, scope);
+    this.bias_l2 = this.MathJS.eval(&#x27;bias_l2-del_3&#x27;, scope);
 
     if (x !== undefined &amp;&amp; y !== undefined)
       cost = this.costFunction(x, y, undefined);
@@ -441,6 +461,8 @@ NeuralNetwork.prototype.train_network = function(X, Y) {
 
     this.W1 = (this.MathJS.random(this.MathJS.matrix([this.inputLayerSize, this.hiddenLayerSize]), -10, 10));
     this.W2 = (this.MathJS.random(this.MathJS.matrix([this.hiddenLayerSize, this.outputLayerSize * this.y.size()[1]]), -10, 10));
+    this.bias_l1 = 1;
+    this.bias_l2 = 1;
   }
   return this.gradientDescent(undefined, undefined, undefined, undefined);
 };
@@ -467,22 +489,18 @@ NeuralNetwork.prototype.predict_result = function(X) {
  * @return {Object} Returns a resolved promise after successfuly setting weights.
  */
 NeuralNetwork.prototype.setWeights = function() {
-  var contents_layer1, contents_layer2;
-  var self = this,
-    success;
-
   var self = this;
   var weights;
-    if(Object.keys(window_object).length === 0){
-       weights = global.localStorage.getItem(&quot;Weights&quot;);
-    }else{
-       weights = localStorage.getItem(&quot;Weights&quot;);
-     }
+  if (Object.keys(window_object).length === 0) {
+    weights = JSON.parse(global.localStorage.getItem(&quot;Weights&quot;));
+  } else {
+    weights = JSON.parse(localStorage.getItem(&quot;Weights&quot;));
+  }
 
-     self.W1 = weights[0];
-     self.W2 = weights[1];
+  self.W1 = this.MathJS.matrix(weights[0].data);
+  self.W2 = this.MathJS.matrix(weights[1].data);
 
-     return [self.W1, self.W2];
+  return [self.W1._data, self.W2._data];
 };
 
 /**
@@ -491,12 +509,12 @@ NeuralNetwork.prototype.setWeights = function() {
  * @method cross_validate_network
  * @param {matrix} X The input matrix representing the features of the cross validation set.
  * @param {matrix} Y The output matrix corresponding to training data of the cross validation set.
- * @return {Number} Returns an error value associated with the cross validation.
+ * @return {Object} Returns a resolved promise with iteration and cost data on successful completion of optimization. 
  */
 NeuralNetwork.prototype.cross_validate_network = function(X, Y) {
   console.log(&quot;\n Cross Validating...&quot;);
   this.algorithm_mode = 1;
-  return this.costFunction(X, Y, undefined);
+  return this.gradientDescent(this.MathJS.matrix(X), this.MathJS.matrix(Y), undefined, undefined);
 };
 
 /**
@@ -505,18 +523,18 @@ NeuralNetwork.prototype.cross_validate_network = function(X, Y) {
  * @method test_network
  * @param {matrix} X The input matrix representing the features of the test set.
  * @param {matrix} Y The output matrix corresponding to training data of the test set.
- * @return {Number} Returns an error value associated with testing.
+ * @return {Object} Returns a resolved promise with iteration and cost data on successful completion of optimization. 
  */
 NeuralNetwork.prototype.test_network = function(X, Y) {
   console.log(&quot;\n Testing...&quot;);
   this.algorithm_mode = 2;
-  return this.costFunction(X, Y, undefined);
+  return this.gradientDescent(this.MathJS.matrix(X), this.MathJS.matrix(Y), undefined, undefined);
 };
 
-if(Object.keys(window_object).length === 0){
-    module.exports = NeuralNetwork;
-}else{
-    window[&#x27;Autoencoder&#x27;] = NeuralNetwork;
+if (Object.keys(window_object).length === 0) {
+  module.exports = NeuralNetwork;
+} else {
+  window[&#x27;NeuralNetwork&#x27;] = NeuralNetwork;
 }
     </pre>
 </div>

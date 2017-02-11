@@ -15546,7 +15546,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 50,
+            "line": 49,
             "description": "This method returns all the parameters passed to the constructor.",
             "itemtype": "method",
             "name": "getInitParams",
@@ -15558,7 +15558,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 71,
+            "line": 70,
             "description": "This method serves as the logic for the sigmoid function.",
             "itemtype": "method",
             "name": "sigmoid",
@@ -15577,7 +15577,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 94,
+            "line": 93,
             "description": "This method is responsible for the forwardPropagation in the Neural Network.",
             "itemtype": "method",
             "name": "forwardPropagation",
@@ -15596,6 +15596,16 @@
                     "name": "W2",
                     "description": "The matrix representing the weights for layer 2.",
                     "type": "Matrix"
+                },
+                {
+                    "name": "bias_l1",
+                    "description": "The matrix representing the bias for layer 1.",
+                    "type": "Matrix"
+                },
+                {
+                    "name": "bias_l2",
+                    "description": "The matrix representing the bias for layer 2.",
+                    "type": "Matrix"
                 }
             ],
             "return": {
@@ -15606,7 +15616,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 118,
+            "line": 123,
             "description": "This method serves as the logic for the sigmoid function derivative.",
             "itemtype": "method",
             "name": "sigmoid_Derivative",
@@ -15625,7 +15635,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 136,
+            "line": 141,
             "description": "This method is responsible for the costFunction, i.e. error.",
             "itemtype": "method",
             "name": "costFunction",
@@ -15654,7 +15664,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 201,
+            "line": 196,
             "description": "This method is responsible for the costFunction_Derivative, i.e. gradient of error with respect to weights.",
             "itemtype": "method",
             "name": "costFunction_Derivative",
@@ -15688,7 +15698,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 254,
+            "line": 256,
             "description": "This method is responsible for saving the trained weights of the Neural Network.",
             "itemtype": "method",
             "name": "saveWeights",
@@ -15707,7 +15717,27 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 273,
+            "line": 274,
+            "description": "This method is responsible for setting bias for layers 1 and 2.",
+            "itemtype": "method",
+            "name": "setBias",
+            "params": [
+                {
+                    "name": "bias_l1",
+                    "description": "The bias for layer1.",
+                    "type": "Number"
+                },
+                {
+                    "name": "bias_l2",
+                    "description": "The bias for layer 2.",
+                    "type": "Number"
+                }
+            ],
+            "class": "NeuralNetwork"
+        },
+        {
+            "file": "NeuralNetwork.js",
+            "line": 287,
             "description": "This method is responsible for the optimization of weights, i.e. BackPropagation algorithm.",
             "itemtype": "method",
             "name": "gradientDescent",
@@ -15741,7 +15771,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 334,
+            "line": 354,
             "description": "This method is responsible for creating layers and initializing random weights.",
             "itemtype": "method",
             "name": "train_network",
@@ -15765,7 +15795,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 366,
+            "line": 388,
             "description": "This contains logic to predict result for a given input after training on data.",
             "itemtype": "method",
             "name": "predict_result",
@@ -15784,7 +15814,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 381,
+            "line": 403,
             "description": "This method is responsible for setting weights of the Neural Network.",
             "itemtype": "method",
             "name": "setWeights",
@@ -15796,7 +15826,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 406,
+            "line": 424,
             "description": "This method is responsible for producing the cross validation error after training data.",
             "itemtype": "method",
             "name": "cross_validate_network",
@@ -15813,14 +15843,14 @@
                 }
             ],
             "return": {
-                "description": "Returns an error value associated with the cross validation.",
-                "type": "Number"
+                "description": "Returns a resolved promise with iteration and cost data on successful completion of optimization.",
+                "type": "Object"
             },
             "class": "NeuralNetwork"
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 420,
+            "line": 438,
             "description": "This method is responsible for producing the test error after training data.",
             "itemtype": "method",
             "name": "test_network",
@@ -15837,8 +15867,8 @@
                 }
             ],
             "return": {
-                "description": "Returns an error value associated with testing.",
-                "type": "Number"
+                "description": "Returns a resolved promise with iteration and cost data on successful completion of optimization.",
+                "type": "Object"
             },
             "class": "NeuralNetwork"
         }

@@ -147,7 +147,7 @@ describe('NeuralNetwork', function() {
     it("should correctly run forwardPropagation()", function() {
       
       var scope = {};
-      y_result = nn.forwardPropagation(X, W1, W2);
+      y_result = nn.forwardPropagation(X, W1, W2, 1, 1);
       z2 = mathJS.multiply(X, W1);
       scope.z2 = z2;
       z2 = mathJS.eval('z2+1', scope);
@@ -188,6 +188,8 @@ describe('NeuralNetwork', function() {
       var success = true;
 
       var J1 = mathJS.sum(mathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]) + (getInitParams.regularization_param / 2) * (mathJS.sum(mathJS.eval('W1.^2', scope)) + mathJS.sum(mathJS.eval('W2.^2', scope))); //regularization parameter
+
+          nn.setBias(1, 1);
 
       var cost1 = nn.costFunction(X, Y, 0);
       var cost2 = nn.costFunction(X, Y, 1);
