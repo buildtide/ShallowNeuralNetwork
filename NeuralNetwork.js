@@ -33,7 +33,6 @@ var NeuralNetwork = function(args) {
   }
   this.initArgs = args;
   this.threshold = args.threshold || (1 / this.MathJS.exp(3));
-  this.algorithm_mode = 0;
   this.iteration_callback = args.iteration_callback;
   this.hiddenLayerSize = args.hiddenLayerSize;
   this.regularization_param = args.regularization_param || 0.01;
@@ -42,7 +41,6 @@ var NeuralNetwork = function(args) {
     'mode': 0
   } : args.optimization_mode;
   this.maximum_iterations = args.maximum_iterations || 1000;
-  this.batch_iteration_count = 0;
   this.notify_count = args.notify_count || 100;
 };
 
@@ -55,7 +53,6 @@ var NeuralNetwork = function(args) {
 
 NeuralNetwork.prototype.getInitParams = function() {
   return {
-    'algorithm_mode': this.algorithm_mode,
     'hiddenLayerSize': this.hiddenLayerSize,
     'optimization_mode': this.optimization_mode,
     'notify_count': this.notify_count,
@@ -144,32 +141,25 @@ NeuralNetwork.prototype.sigmoid_Derivative = function(z) {
  * @method costFunction 
  * @param {matrix} X The input matrix representing the features.
  * @param {matrix} Y The output matrix corresponding to training data.
- * @param {Number} algorithm_mode The current algorithm mode (testing: 2, crossvalidating: 1, training: 0).
+ * @param {matrix} W1 The matrix representing the weights for layer 1.
+ * @param {matrix} W2 The matrix representing the weights for layer 2.
+ * @param {Number} iteration_count Is the iteration count since the training started.
  * @return {Number} Returns the resultant cost.
  */
-NeuralNetwork.prototype.costFunction = function(X, Y, algorithm_mode) {
+NeuralNetwork.prototype.costFunction = function(X, Y, W1, W2,iteration_count) {
   var J, batch_size;
   var scope = {};
-  var iteration_count;
 
   scope.y = this.MathJS.matrix(Y);
   scope.x = this.MathJS.matrix(X);
-  scope.W1 = this.W1;
-  scope.W2 = this.W2;
-  this.algorithm_mode = algorithm_mode || this.algorithm_mode;
-
-  this.batch_iteration_count++;
-  iteration_count = this.batch_iteration_count;
+  scope.W1 = W1||this.W1;
+  scope.W2 = W2||this.W2;
 
   if (this.optimization_mode.mode === 1) { //cost for mini-batch gradient descent.
     batch_size = this.optimization_mode.batch_size;
 
     scope.x = this.MathJS.matrix(scope.x._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
     scope.y = this.MathJS.matrix(scope.y._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
-
-    if (iteration_count * this.optimization_mode.batch_size === scope.x.size()[0]) {
-      this.batch_iteration_count = 0;
-    }
 
     this.y_result = this.forwardPropagation(scope.x, undefined, undefined, undefined, undefined);
     scope.y_result = this.y_result;
@@ -201,16 +191,16 @@ NeuralNetwork.prototype.costFunction = function(X, Y, algorithm_mode) {
  * @param {matrix} Y The output matrix corresponding to training data.
  * @param {matrix} W1 The matrix representing the weights for layer 1.
  * @param {matrix} W2 The matrix representing the weights for layer 2.
+ * @param {Number} iteration_count Is the iteration count since the training started.
  * @return {Array} Returns the resultant gradients with respect to layer 1: dJdW1 and layer 2: dJdW2 of the Neural Network.
  */
 
-NeuralNetwork.prototype.costFunction_Derivative = function(X, Y, W1, W2) {
+NeuralNetwork.prototype.costFunction_Derivative = function(X, Y, W1, W2, iteration_count) {
   if (this.optimization_mode.mode === 1) {
 
     this.x = X || this.x;
     this.y = Y || this.y;
 
-    var iteration_count = this.batch_iteration_count;
     var batch_size = this.optimization_mode.batch_size;
     var X = this.MathJS.matrix(this.x._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
     var Y = this.MathJS.matrix(this.y._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
@@ -218,7 +208,7 @@ NeuralNetwork.prototype.costFunction_Derivative = function(X, Y, W1, W2) {
   }
 
   this.x = X || this.x;
-  this.y_result = this.forwardPropagation(this.x, undefined, undefined);
+  this.y_result = this.forwardPropagation(this.x, undefined, undefined, undefined, undefined);
   var scope = {};
   scope.y_result = this.y_result;
   scope.y = Y || this.y;
@@ -304,17 +294,16 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     cost,
     scope = {},
     defered = this.q.defer(),
-    i = 1;
+    i = 1, inner_iterations =0;
 
-  if (this.algorithm_mode == 0)
-    console.log('Training ...\n');
+  console.log('Training ...\n');
 
   while (true) {
 
     if (x !== undefined && y !== undefined && W1 !== undefined && W2 !== undefined)
-      gradient = this.costFunction_Derivative(x, y, W1, W2);
+      gradient = this.costFunction_Derivative(x, y, W1, W2, inner_iterations);
     else
-      gradient = this.costFunction_Derivative(x, y, undefined, undefined);
+      gradient = this.costFunction_Derivative(x, y, undefined, undefined, inner_iterations);
     scope.W1 = W1 || this.W1;
     scope.W2 = W2 || this.W2;
     scope.rate = this.learningRate;
@@ -331,24 +320,31 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     this.bias_l2 = this.MathJS.eval('bias_l2-del_3', scope);
 
     if (x !== undefined && y !== undefined)
-      cost = this.costFunction(x, y, undefined);
+      cost = this.costFunction(x, y, undefined, undefined, inner_iterations);
     if (i % this.notify_count === 0 && this.iteration_callback !== undefined) {
-      this.iteration_callback.apply(null, [{
+      this.iteration_callback.apply(this, [{
         'cost': cost,
         'iteration': i /*iteration count*/ ,
         'Weights_Layer1': self.W1,
-        'Weights_Layer2': self.W2
+        'Weights_Layer2': self.W2,
+        'gradient': gradient
       }]); //notify cost values for diagnosing the performance of learning algorithm.
     }
+    if(this.optimization_mode.mode === 1){
+      if(this.optimization_mode.batch_size*inner_iterations>=this.x.size()[0]){
+         inner_iterations  = 0;
+      }
+
+    }
+
     i++;
-    if (i > this.maximum_iterations || cost <= (this.threshold)) {
+    inner_iterations++;
+    if (i> this.maximum_iterations || cost <= (this.threshold)) {
       this.saveWeights([this.W1, this.W2]);
       defered.resolve([cost, i]);
-      break;
+      return defered.promise;
     }
   }
-
-  return defered.promise;
 };
 
 /**
@@ -362,7 +358,6 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
 NeuralNetwork.prototype.train_network = function(X, Y) {
   this.x = this.MathJS.matrix(X);
   this.y = this.MathJS.matrix(Y);
-  this.algorithm_mode = 0;
 
   if ((this.y.size()[0] !== this.x.size()[0])) {
     console.log('\nPlease change the size of the input matrices so that X and Y have same number of rows.');
@@ -396,7 +391,7 @@ NeuralNetwork.prototype.train_network = function(X, Y) {
 NeuralNetwork.prototype.predict_result = function(X) {
   var y_result;
   this.setWeights();
-  y_result = this.forwardPropagation(X);
+  y_result = this.forwardPropagation(X, undefined, undefined, undefined, undefined);
   return y_result;
 };
 
@@ -421,33 +416,6 @@ NeuralNetwork.prototype.setWeights = function() {
   return [self.W1._data, self.W2._data];
 };
 
-/**
- *This method is responsible for producing the cross validation error after training data.
- *
- * @method cross_validate_network
- * @param {matrix} X The input matrix representing the features of the cross validation set.
- * @param {matrix} Y The output matrix corresponding to training data of the cross validation set.
- * @return {Object} Returns a resolved promise with iteration and cost data on successful completion of optimization. 
- */
-NeuralNetwork.prototype.cross_validate_network = function(X, Y) {
-  console.log("\n Cross Validating...");
-  this.algorithm_mode = 1;
-  return this.gradientDescent(this.MathJS.matrix(X), this.MathJS.matrix(Y), undefined, undefined);
-};
-
-/**
- *This method is responsible for producing the test error after training data.
- *
- * @method test_network
- * @param {matrix} X The input matrix representing the features of the test set.
- * @param {matrix} Y The output matrix corresponding to training data of the test set.
- * @return {Object} Returns a resolved promise with iteration and cost data on successful completion of optimization. 
- */
-NeuralNetwork.prototype.test_network = function(X, Y) {
-  console.log("\n Testing...");
-  this.algorithm_mode = 2;
-  return this.gradientDescent(this.MathJS.matrix(X), this.MathJS.matrix(Y), undefined, undefined);
-};
 
 if (Object.keys(window_object).length === 0) {
   module.exports = NeuralNetwork;
