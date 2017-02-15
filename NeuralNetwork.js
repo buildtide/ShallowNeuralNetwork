@@ -105,8 +105,8 @@ NeuralNetwork.prototype.forwardPropagation = function(X, W1, W2, bias_l1, bias_l
   this.W2 = W2 || this.W2;
   this.z2 = this.MathJS.multiply(X, this.W1);
   scope.z2 = this.z2;
-  scope.bias_l1 = this.bias_l1 || bias_l1;
-  scope.bias_l2 = this.bias_l2 || bias_l2;
+  scope.bias_l1 = bias_l1 || this.bias_l1;
+  scope.bias_l2 = bias_l2 || this.bias_l2;
 
   this.z2 = this.MathJS.eval('z2+bias_l1', scope);
   this.a2 = this.sigmoid(this.z2);
@@ -391,6 +391,22 @@ NeuralNetwork.prototype.train_network = function(X, Y) {
 NeuralNetwork.prototype.predict_result = function(X) {
   var y_result;
   this.setWeights();
+  if(X.length!==this.bias_l1.size()[0]){
+    var scope = {};
+        scope.ones_l1 =  this.MathJS.ones(X.length, this.bias_l1.size()[0]);
+        scope.bias_l1 = this.bias_l1;
+    var predict_bias_l1 = this.MathJS.eval('ones_l1*bias_l1',scope);
+
+    var scope = {};
+        scope.ones_l2 =  this.MathJS.ones(X.length, this.bias_l2.size()[0]);
+        scope.bias_l2 = this.bias_l2;
+    var predict_bias_l2 = this.MathJS.eval('ones_l2*bias_l2',scope);
+   
+    y_result = this.forwardPropagation(X, undefined, undefined, predict_bias_l1, predict_bias_l2);
+
+    return y_result;
+  }
+
   y_result = this.forwardPropagation(X, undefined, undefined, undefined, undefined);
   return y_result;
 };
