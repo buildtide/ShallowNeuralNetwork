@@ -337,7 +337,6 @@ describe('NeuralNetwork', function() {
 
       it("should call setWeights()", function() {
         let spy = sinon.spy(nn, "setWeights");
-        spy.withArgs(X);
         nn.predict_result(X);
         spy.restore();
         assert.deepStrictEqual(spy.calledOnce, true);
@@ -345,7 +344,6 @@ describe('NeuralNetwork', function() {
 
       it("should call forward_Propagation()", function() {
         let spy = sinon.spy(nn, "forwardPropagation");
-        spy.withArgs(X);
         nn.predict_result(X);
         spy.restore();
         assert.deepStrictEqual(spy.calledOnce, true);

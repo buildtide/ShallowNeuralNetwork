@@ -393,12 +393,12 @@ NeuralNetwork.prototype.predict_result = function(X) {
   this.setWeights();
   if(X.length!==this.bias_l1.size()[0]){
     var scope = {};
-        scope.ones_l1 =  this.MathJS.ones(X.length, this.bias_l1.size()[0]);
+        scope.ones_l1 =  this.MathJS.ones(X.length||X.size()[0], this.bias_l1.size()[0]);
         scope.bias_l1 = this.bias_l1;
     var predict_bias_l1 = this.MathJS.eval('ones_l1*bias_l1',scope);
 
     var scope = {};
-        scope.ones_l2 =  this.MathJS.ones(X.length, this.bias_l2.size()[0]);
+        scope.ones_l2 =  this.MathJS.ones(X.length||X.size()[0], this.bias_l2.size()[0]);
         scope.bias_l2 = this.bias_l2;
     var predict_bias_l2 = this.MathJS.eval('ones_l2*bias_l2',scope);
    
