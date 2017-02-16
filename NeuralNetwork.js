@@ -297,7 +297,7 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     cost,
     scope = {},
     defered = this.q.defer(),
-    i = 1, inner_iterations =0;
+    i = 1, inner_iterations =0, epochs = 0;
 
   console.log('Training ...\n');
 
@@ -327,6 +327,7 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     if (i % this.notify_count === 0 && this.iteration_callback !== undefined) {
       this.iteration_callback.apply(this, [{
         'cost': cost,
+        'epochs':epochs,
         'iteration': i /*iteration count*/ ,
         'Weights_Layer1': self.W1,
         'Weights_Layer2': self.W2,
@@ -336,6 +337,7 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     if(this.optimization_mode.mode === 1){
       if(this.optimization_mode.batch_size*inner_iterations>=this.x.size()[0]){
          inner_iterations  = 0;
+         epochs++;
       }
 
     }
