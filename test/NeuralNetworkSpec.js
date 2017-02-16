@@ -70,13 +70,16 @@ describe('NeuralNetwork', function() {
     let W1 = (mathJS.random(mathJS.matrix([9, 10]), -5, 5)),
       W2 = (mathJS.random(mathJS.matrix([10, 3]), -5, 5));
 
+    let bias_layer1 = mathJS.ones(2, 10)
+        ,bias_layer2 = mathJS.ones(2, 10);
+
     it('should successfuly save weights', function() {
-      nn.saveWeights([W1, W2]);
+      nn.saveWeights([W1, W2],[bias_layer1, bias_layer2]);
       assert.deepStrictEqual([JSON.parse(global.localStorage.getItem("Weights"))[0].data, JSON.parse(global.localStorage.getItem("Weights"))[1].data], [W1._data, W2._data]);
     });
 
     it('should successfuly set weights', function(done) {
-       assert.deepStrictEqual(nn.setWeights(),[W1._data, W2._data]);
+       assert.deepStrictEqual(nn.setWeights(),[W1._data, W2._data, bias_layer1, bias_layer2]);
        done();
     });
   });

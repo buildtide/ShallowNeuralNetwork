@@ -244,18 +244,21 @@ NeuralNetwork.prototype.costFunction_Derivative = function(X, Y, W1, W2, iterati
 };
 
 /**
- *This method is responsible for saving the trained weights of the Neural Network.
+ *This method is responsible for saving the trained weights and biases of the Neural Network.
  *
  * @method saveWeights 
- * @param {Array} weights The weights of the layer1 and layer2 of the Neural Network.
+ * @param {Matrix} weights The weights of the layer1 and layer2 of the Neural Network.
+ * @param {Matrix} biases The biases of the layer1 and layer2 of the Neural Network.
  * @return {Boolean} Returns true after succesfuly saving the weights.
  */
-NeuralNetwork.prototype.saveWeights = function(weights) {
+NeuralNetwork.prototype.saveWeights = function(weights, biases) {
   var defered = this.q.defer();
   if (Object.keys(window_object).length === 0) {
     global.localStorage.setItem("Weights", JSON.stringify(weights));
+    global.localStorage.setItem("Biases", JSON.stringify(biases));
   } else {
     localStorage.setItem("Weights", JSON.stringify(weights));
+    localStorage.setItem("Biases", JSON.stringify(biases));
   }
   console.log("\nWeights were successfuly saved.");
   return true;
@@ -340,7 +343,7 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     i++;
     inner_iterations++;
     if (i> this.maximum_iterations || cost <= (this.threshold)) {
-      this.saveWeights([this.W1, this.W2]);
+      this.saveWeights([this.W1, this.W2],[this.bias_l1, this.bias_l2]);
       defered.resolve([cost, i]);
       return defered.promise;
     }
@@ -412,24 +415,29 @@ NeuralNetwork.prototype.predict_result = function(X) {
 };
 
 /**
- *This method is responsible for setting weights of the Neural Network.
+ *This method is responsible for setting weights and biases of the Neural Network from storage.
  *
  * @method setWeights 
- * @return {Object} Returns a resolved promise after successfuly setting weights.
+ * @return {Object} Returns a resolved promise after successfuly setting weights and biases.
  */
 NeuralNetwork.prototype.setWeights = function() {
   var self = this;
-  var weights;
+  var weights, biases;
   if (Object.keys(window_object).length === 0) {
     weights = JSON.parse(global.localStorage.getItem("Weights"));
+    biases = JSON.parse(global.localStorage.getItem("Biases"));
   } else {
     weights = JSON.parse(localStorage.getItem("Weights"));
+    biases = JSON.parse(localStorage.getItem("Biases"));
   }
 
   self.W1 = this.MathJS.matrix(weights[0].data);
   self.W2 = this.MathJS.matrix(weights[1].data);
 
-  return [self.W1._data, self.W2._data];
+  self.bias_l1 = this.MathJS.matrix(biases[0].data);
+  self.bias_l2 = this.MathJS.matrix(biases[1].data);
+
+  return [self.W1._data, self.W2._data, self.bias_l1, self.bias_l2];
 };
 
 

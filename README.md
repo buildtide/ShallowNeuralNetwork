@@ -31,7 +31,6 @@ var callback = function (data) {
 var nn =  new window.NeuralNetwork({
         'hiddenLayerSize': 12,
         'learningRate': 0.1,
-        'algorithm_mode': 0 /*This is to specify if  training:0, cross validating:1 or testing:2 data.*/ ,
         'threshold': undefined /*optional threshold value*/ ,
         'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting*/ ,
         'optimization_mode': {
@@ -57,26 +56,7 @@ nn.train_network([
     [1,0,0],
     [1,1,0],
     [0,1,0]
-]).then(
-console.log(nn.cross_validate_network([   
-    [1, 1, 1, 1, 0, 1],
-    [0, 1, 0, 0, 1, 0],
-    [1, 1, 1, 1, 0, 1],
-    [0, 1, 0, 0, 1, 0]],[
-    [1,1,1],
-    [1,0,1],
-    [1,1,1],
-    [1,0,1]]
-    ))).then(
-console.log(nn.test_network([
-    [1, 1, 1, 1, 0, 1],
-    [0, 1, 0, 0, 1, 0],
-    [1, 1, 1, 1, 0, 1],
-    [0, 1, 0, 0, 1, 0]],[
-    [1,1,1],
-    [1,0,1],
-    [1,1,1],
-    [1,0,1]]))).then(console.log(nn.predict_result([[1,0,0,1,0,1]])));  
+]).then(console.log(nn.predict_result([[1,0,0,1,0,1]])));  
 
 */
 ```
