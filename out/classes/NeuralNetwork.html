@@ -256,10 +256,6 @@
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_cross_validate_network">cross_validate_network</a>
-
-                            </li>
-                            <li class="index-item method">
                                 <a href="#method_forwardPropagation">forwardPropagation</a>
 
                             </li>
@@ -296,10 +292,6 @@
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_test_network">test_network</a>
-
-                            </li>
-                            <li class="index-item method">
                                 <a href="#method_train_network">train_network</a>
 
                             </li>
@@ -325,7 +317,13 @@
                         <code>Y</code>
                 </li>
                 <li class="arg">
-                        <code>algorithm_mode</code>
+                        <code>W1</code>
+                </li>
+                <li class="arg">
+                        <code>W2</code>
+                </li>
+                <li class="arg">
+                        <code>iteration_count</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -343,7 +341,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l141"><code>NeuralNetwork.js:141</code></a>
+        <a href="../files/NeuralNetwork.js.html#l138"><code>NeuralNetwork.js:138</code></a>
         </p>
 
 
@@ -382,12 +380,34 @@
 
                 </li>
                 <li class="param">
-                        <code class="param-name">algorithm_mode</code>
+                        <code class="param-name">W1</code>
+                        <span class="type">Matrix</span>
+
+
+                    <div class="param-description">
+                        <p>The matrix representing the weights for layer 1.</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">W2</code>
+                        <span class="type">Matrix</span>
+
+
+                    <div class="param-description">
+                        <p>The matrix representing the weights for layer 2.</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">iteration_count</code>
                         <span class="type">Number</span>
 
 
                     <div class="param-description">
-                        <p>The current algorithm mode (testing: 2, crossvalidating: 1, training: 0).</p>
+                        <p>Is the iteration count since the training started.</p>
 
                     </div>
 
@@ -424,6 +444,9 @@
                 <li class="arg">
                         <code>W2</code>
                 </li>
+                <li class="arg">
+                        <code>iteration_count</code>
+                </li>
             </ul><span class="paren">)</span>
         </div>
 
@@ -440,7 +463,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l196"><code>NeuralNetwork.js:196</code></a>
+        <a href="../files/NeuralNetwork.js.html#l186"><code>NeuralNetwork.js:186</code></a>
         </p>
 
 
@@ -500,6 +523,17 @@
                     </div>
 
                 </li>
+                <li class="param">
+                        <code class="param-name">iteration_count</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <p>Is the iteration count since the training started.</p>
+
+                    </div>
+
+                </li>
             </ul>
         </div>
 
@@ -509,86 +543,6 @@
             <div class="returns-description">
                         <span class="type">Array</span>:
                     <p>Returns the resultant gradients with respect to layer 1: dJdW1 and layer 2: dJdW2 of the Neural Network.</p>
-
-            </div>
-        </div>
-
-
-</div>
-<div id="method_cross_validate_network" class="method item">
-    <h3 class="name"><code>cross_validate_network</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>X</code>
-                </li>
-                <li class="arg">
-                        <code>Y</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/NeuralNetwork.js.html#l424"><code>NeuralNetwork.js:424</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>This method is responsible for producing the cross validation error after training data.</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">X</code>
-                        <span class="type">Matrix</span>
-
-
-                    <div class="param-description">
-                        <p>The input matrix representing the features of the cross validation set.</p>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">Y</code>
-                        <span class="type">Matrix</span>
-
-
-                    <div class="param-description">
-                        <p>The output matrix corresponding to training data of the cross validation set.</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Object</span>:
-                    <p>Returns a resolved promise with iteration and cost data on successful completion of optimization.</p>
 
             </div>
         </div>
@@ -631,7 +585,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l93"><code>NeuralNetwork.js:93</code></a>
+        <a href="../files/NeuralNetwork.js.html#l90"><code>NeuralNetwork.js:90</code></a>
         </p>
 
 
@@ -735,7 +689,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l49"><code>NeuralNetwork.js:49</code></a>
+        <a href="../files/NeuralNetwork.js.html#l47"><code>NeuralNetwork.js:47</code></a>
         </p>
 
 
@@ -793,7 +747,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l287"><code>NeuralNetwork.js:287</code></a>
+        <a href="../files/NeuralNetwork.js.html#l280"><code>NeuralNetwork.js:280</code></a>
         </p>
 
 
@@ -942,6 +896,9 @@
                 <li class="arg">
                         <code>weights</code>
                 </li>
+                <li class="arg">
+                        <code>biases</code>
+                </li>
             </ul><span class="paren">)</span>
         </div>
 
@@ -958,7 +915,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l256"><code>NeuralNetwork.js:256</code></a>
+        <a href="../files/NeuralNetwork.js.html#l246"><code>NeuralNetwork.js:246</code></a>
         </p>
 
 
@@ -966,7 +923,7 @@
     </div>
 
     <div class="description">
-        <p>This method is responsible for saving the trained weights of the Neural Network.</p>
+        <p>This method is responsible for saving the trained weights and biases of the Neural Network.</p>
 
     </div>
 
@@ -976,11 +933,22 @@
             <ul class="params-list">
                 <li class="param">
                         <code class="param-name">weights</code>
-                        <span class="type">Array</span>
+                        <span class="type">Matrix</span>
 
 
                     <div class="param-description">
                         <p>The weights of the layer1 and layer2 of the Neural Network.</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">biases</code>
+                        <span class="type">Matrix</span>
+
+
+                    <div class="param-description">
+                        <p>The biases of the layer1 and layer2 of the Neural Network.</p>
 
                     </div>
 
@@ -1024,7 +992,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l274"><code>NeuralNetwork.js:274</code></a>
+        <a href="../files/NeuralNetwork.js.html#l267"><code>NeuralNetwork.js:267</code></a>
         </p>
 
 
@@ -1086,7 +1054,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l403"><code>NeuralNetwork.js:403</code></a>
+        <a href="../files/NeuralNetwork.js.html#l419"><code>NeuralNetwork.js:419</code></a>
         </p>
 
 
@@ -1094,7 +1062,7 @@
     </div>
 
     <div class="description">
-        <p>This method is responsible for setting weights of the Neural Network.</p>
+        <p>This method is responsible for setting weights and biases of the Neural Network from storage.</p>
 
     </div>
 
@@ -1104,7 +1072,7 @@
 
             <div class="returns-description">
                         <span class="type">Object</span>:
-                    <p>Returns a resolved promise after successfuly setting weights.</p>
+                    <p>Returns a resolved promise after successfuly setting weights and biases.</p>
 
             </div>
         </div>
@@ -1135,7 +1103,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l70"><code>NeuralNetwork.js:70</code></a>
+        <a href="../files/NeuralNetwork.js.html#l67"><code>NeuralNetwork.js:67</code></a>
         </p>
 
 
@@ -1201,7 +1169,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l123"><code>NeuralNetwork.js:123</code></a>
+        <a href="../files/NeuralNetwork.js.html#l120"><code>NeuralNetwork.js:120</code></a>
         </p>
 
 
@@ -1243,86 +1211,6 @@
 
 
 </div>
-<div id="method_test_network" class="method item">
-    <h3 class="name"><code>test_network</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>X</code>
-                </li>
-                <li class="arg">
-                        <code>Y</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/NeuralNetwork.js.html#l438"><code>NeuralNetwork.js:438</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>This method is responsible for producing the test error after training data.</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">X</code>
-                        <span class="type">Matrix</span>
-
-
-                    <div class="param-description">
-                        <p>The input matrix representing the features of the test set.</p>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">Y</code>
-                        <span class="type">Matrix</span>
-
-
-                    <div class="param-description">
-                        <p>The output matrix corresponding to training data of the test set.</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Object</span>:
-                    <p>Returns a resolved promise with iteration and cost data on successful completion of optimization.</p>
-
-            </div>
-        </div>
-
-
-</div>
 <div id="method_train_network" class="method item">
     <h3 class="name"><code>train_network</code></h3>
 
@@ -1350,7 +1238,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l354"><code>NeuralNetwork.js:354</code></a>
+        <a href="../files/NeuralNetwork.js.html#l355"><code>NeuralNetwork.js:355</code></a>
         </p>
 
 
