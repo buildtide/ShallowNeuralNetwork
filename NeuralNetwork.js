@@ -353,8 +353,6 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     this.W2 = this.MathJS.eval('W2 - dJdW2.*rate', scope);
     this.W1 = this.MathJS.eval('W1 - dJdW1.*rate', scope);
 
-    //console.log(this.bias_l1.size(), scope.del_2, this.bias_l2.size(), scope.del_3);
-
     this.bias_l1 = this.MathJS.eval('bias_l1-del_2', scope);
     this.bias_l2 = this.MathJS.eval('bias_l2-del_3', scope);
 
