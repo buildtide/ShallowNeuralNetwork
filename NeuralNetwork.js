@@ -99,19 +99,29 @@ NeuralNetwork.prototype.sigmoid = function(z) {
  * @return {matrix} Returns the resultant ouput of forwardPropagation.
  */
 NeuralNetwork.prototype.forwardPropagation = function(X, W1, W2, bias_l1, bias_l2) {
-  var y_result, X = X || this.x,
+  var y_result, X = this.MathJS.matrix(X) || this.x,
     scope = {};
   this.W1 = W1 || this.W1;
   this.W2 = W2 || this.W2;
   this.z2 = this.MathJS.multiply(X, this.W1);
   scope.z2 = this.z2;
-  scope.bias_l1 = bias_l1 || this.bias_l1;
-  scope.bias_l2 = bias_l2 || this.bias_l2;
+
+  scope.ones_l1 =  this.MathJS.ones(X.size()[0], this.bias_l1.size()[0]);
+  scope.bias_l1 = this.bias_l1;
+  scope.resized_bias_l1 = this.MathJS.eval('ones_l1*bias_l1',scope);
+
+  scope.ones_l2 =  this.MathJS.ones(X.size()[0], this.bias_l2.size()[0]);
+  scope.bias_l2 = this.bias_l2;
+  scope.resized_bias_l2 = this.MathJS.eval('ones_l2*bias_l2',scope);
+
+  scope.bias_l1 = bias_l1 || scope.resized_bias_l1;
+  scope.bias_l2 = bias_l2 || scope.resized_bias_l2;
 
   this.z2 = this.MathJS.eval('z2+bias_l1', scope);
   this.a2 = this.sigmoid(this.z2);
   this.z3 = this.MathJS.multiply(this.a2, this.W2);
   scope.z3 = this.z3;
+
   this.z3 = this.MathJS.eval('z3+bias_l2', scope);
   y_result = this.sigmoid(this.z3);
   return y_result;
@@ -165,14 +175,6 @@ NeuralNetwork.prototype.costFunction = function(X, Y, W1, W2,iteration_count) {
     scope.y_result = this.y_result;
 
     J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) / (this.optimization_mode.batch_size) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval('W1.^2', scope)) + this.MathJS.sum(this.MathJS.eval('W2.^2', scope))); //cost with regularization parameter.
-  } else if (this.optimization_mode.mode === 2 && (iteration_count <= scope.x.size()[0])) { // cost for stochastic gradient descent.
-    scope.x = this.MathJS.matrix(scope.x._data[iteration_count - 1]);
-    scope.y = this.MathJS.matrix(scope.y._data[iteration_count - 1]);
-
-    this.y_result = this.forwardPropagation(scope.x, undefined, undefined, undefined, undefined);
-    scope.y_result = this.y_result;
-
-    J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval('W1.^2', scope)) + this.MathJS.sum(this.MathJS.eval('W2.^2', scope))); //cost with regularization parameter.
   } else if (this.optimization_mode.mode === 0) { //cost with batch gradient descent.
     this.y_result = this.forwardPropagation(scope.x, undefined, undefined, undefined, undefined);
     scope.y_result = this.y_result;
@@ -277,6 +279,30 @@ NeuralNetwork.prototype.setBias = function(bias_l1, bias_l2) {
 };
 
 
+
+/**
+* This method randomizes matrix element order in-place using Durstenfeld shuffle algorithm.
+*
+* @method shuffleMatrix 
+* @param {Matrix} matrix The first matrix to be shuffled.
+* @param {Matrix} matrix2 The second matrix to be shuffled.
+*/
+ NeuralNetwork.prototype.shuffleMatrix = function(matrix, matrix2) {
+            for (var i = matrix.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                
+                var temp = matrix[i];
+                matrix[i] = matrix[j];
+                matrix[j] = temp;
+
+                var temp2 = matrix2[i];
+                matrix2[i] = matrix2[j];
+                matrix2[j] = temp2;
+            }
+            return [matrix, matrix2];
+  }
+
+
 /**
  *This method is responsible for the optimization of weights, i.e. BackPropagation algorithm.
  *
@@ -315,10 +341,20 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
     scope.bias_l1 = this.bias_l1;
     scope.bias_l2 = this.bias_l2;
     scope.del_3 = gradient[3];
+    scope.del_3_mean = this.MathJS.mean(gradient[3],0);
+    scope.del_3_size = scope.del_3.size()[0];
+    scope.del_3 = [this.MathJS.eval('del_3_size*del_3_mean',scope)];
+
     scope.del_2 = gradient[2];
+    scope.del_2_mean = this.MathJS.mean(gradient[2],0);
+    scope.del_2_size = scope.del_2.size()[0];
+    scope.del_2 = [this.MathJS.eval('del_2_size*del_2_mean',scope)];
 
     this.W2 = this.MathJS.eval('W2 - dJdW2.*rate', scope);
     this.W1 = this.MathJS.eval('W1 - dJdW1.*rate', scope);
+
+    //console.log(this.bias_l1.size(), scope.del_2, this.bias_l2.size(), scope.del_3);
+
     this.bias_l1 = this.MathJS.eval('bias_l1-del_2', scope);
     this.bias_l2 = this.MathJS.eval('bias_l2-del_3', scope);
 
@@ -331,19 +367,30 @@ NeuralNetwork.prototype.gradientDescent = function(X, Y, W1, W2) {
         'iteration': i /*iteration count*/ ,
         'Weights_Layer1': self.W1,
         'Weights_Layer2': self.W2,
+        'Bias_Layer1': self.bias_l1,
+        'Bias_Layer2': self.bias_l2,
         'gradient': gradient
       }]); //notify cost values for diagnosing the performance of learning algorithm.
     }
-    if(this.optimization_mode.mode === 1){
-      if(this.optimization_mode.batch_size*inner_iterations>=this.x.size()[0]){
-         inner_iterations  = 0;
-         epochs++;
-      }
-
-    }
-
+    
     i++;
     inner_iterations++;
+
+    if(this.optimization_mode.mode === 1){
+        if(this.optimization_mode.batch_size + (this.optimization_mode.batch_size  * inner_iterations)>=x.size()[0]){
+           inner_iterations  = 0;
+           epochs++;
+           var shufflmatrx = this.shuffleMatrix(x, y);
+           x = shufflmatrx[0];
+           y = shufflmatrx[1];
+        }
+    }if(this.optimization_mode.mode === 0){
+           epochs++;
+           var shufflmatrx = this.shuffleMatrix(x, y);
+           x = shufflmatrx[0];
+           y = shufflmatrx[1];
+    }
+
     if (i> this.maximum_iterations || cost <= (this.threshold)) {
       this.saveWeights([this.W1, this.W2],[this.bias_l1, this.bias_l2]);
       defered.resolve([cost, i]);
@@ -379,8 +426,8 @@ NeuralNetwork.prototype.train_network = function(X, Y) {
 
     this.W1 = (this.MathJS.random(this.MathJS.matrix([this.inputLayerSize, this.hiddenLayerSize]), -10, 10));
     this.W2 = (this.MathJS.random(this.MathJS.matrix([this.hiddenLayerSize, this.outputLayerSize * this.y.size()[1]]), -10, 10));
-    this.bias_l1 = 1;
-    this.bias_l2 = 1;
+    this.bias_l1 = this.MathJS.matrix([this.MathJS.ones(this.hiddenLayerSize)._data]);
+    this.bias_l2 = this.MathJS.matrix([this.MathJS.ones(this.y.size()[1])._data]);
   }
   return this.gradientDescent(undefined, undefined, undefined, undefined);
 };
@@ -396,22 +443,6 @@ NeuralNetwork.prototype.train_network = function(X, Y) {
 NeuralNetwork.prototype.predict_result = function(X) {
   var y_result;
   this.setWeights();
-  if(X.length!==this.bias_l1.size()[0]){
-    var scope = {};
-        scope.ones_l1 =  this.MathJS.ones(X.length||X.size()[0], this.bias_l1.size()[0]);
-        scope.bias_l1 = this.bias_l1;
-    var predict_bias_l1 = this.MathJS.eval('ones_l1*bias_l1',scope);
-
-    var scope = {};
-        scope.ones_l2 =  this.MathJS.ones(X.length||X.size()[0], this.bias_l2.size()[0]);
-        scope.bias_l2 = this.bias_l2;
-    var predict_bias_l2 = this.MathJS.eval('ones_l2*bias_l2',scope);
-   
-    y_result = this.forwardPropagation(X, undefined, undefined, predict_bias_l1, predict_bias_l2);
-
-    return y_result;
-  }
-
   y_result = this.forwardPropagation(X, undefined, undefined, undefined, undefined);
   return y_result;
 };

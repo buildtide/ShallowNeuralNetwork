@@ -37,8 +37,8 @@ describe('NeuralNetwork', function() {
   };
 
   let nn = new NeuralNetwork({
-    'hiddenLayerSize': 12,
-    'learningRate': 0.9,
+    'hiddenLayerSize': 11,
+    'learningRate': 0.3,
     'algorithm_mode': 0 ,
     'threshold_value': undefined /*optional threshold value*/ ,
     'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting*/ ,
@@ -53,8 +53,8 @@ describe('NeuralNetwork', function() {
   let getInitParams = nn.getInitParams();
 
   it("should correctly set parameters", function() {
-    assert.deepStrictEqual(getInitParams.learningRate, 0.9);
-    assert.deepStrictEqual(getInitParams.hiddenLayerSize, 12);
+    assert.deepStrictEqual(getInitParams.learningRate, 0.3);
+    assert.deepStrictEqual(getInitParams.hiddenLayerSize, 11);
     assert.deepStrictEqual(getInitParams.threshold, (1 / mathJS.exp(3)));
     assert.deepStrictEqual(getInitParams.regularization_param, 0.01);
     assert.deepStrictEqual(getInitParams.notify_count, 10);
@@ -192,9 +192,9 @@ describe('NeuralNetwork', function() {
 
       let J1 = mathJS.sum(mathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]) + (getInitParams.regularization_param / 2) * (mathJS.sum(mathJS.eval('W1.^2', scope)) + mathJS.sum(mathJS.eval('W2.^2', scope))); //regularization parameter
 
-          nn.setBias(1, 1);
+          nn.setBias(mathJS.matrix([mathJS.ones(11)._data]), mathJS.matrix([mathJS.ones(Y.size()[1])._data]));
 
-      let cost1 = nn.costFunction(X, Y, 0);
+      let cost1 = nn.costFunction(X, Y, W1, W2,0);
      
       if (cost1 !== J1)
         success = false;
