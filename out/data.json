@@ -52,37 +52,37 @@
                         },
                         {
                             "name": "threshold_value",
-                            "description": "Optional threshold value for error.",
+                            "description": "Optional threshold value for cost. Defaults to 1/(e^3).",
                             "type": "Number"
                         },
                         {
                             "name": "regularization_parameter",
-                            "description": "Optional regularization parameter to prevent overfitting.",
+                            "description": "Optional regularization parameter to prevent overfitting. Defaults to 0.01.",
                             "type": "Number"
                         },
                         {
                             "name": "notify_count",
-                            "description": "Optional value to execute the iteration_callback after every x number of iterations.",
+                            "description": "Optional value to execute the iteration_callback after every x number of iterations. Defaults to 100.",
                             "type": "Number"
                         },
                         {
                             "name": "iteration_callback",
-                            "description": "Optional callback that can be used for getting cost and iteration value on every notify count.",
+                            "description": "Optional callback that can be used for getting cost and iteration value on every notify count. Defaults to empty function.",
                             "type": "Function"
                         },
                         {
                             "name": "hiddenLayerSize",
-                            "description": "Optional value for number of hidden layer units.",
+                            "description": "Value for number of hidden layer units.",
                             "type": "Number"
                         },
                         {
                             "name": "maximum_iterations",
-                            "description": "Optional maximum iterations to be allowed before the optimization is complete.",
+                            "description": "Optional maximum iterations to be allowed before the optimization is complete. Defaults to 1000.",
                             "type": "Number"
                         },
                         {
                             "name": "optimization_mode",
-                            "description": "Optional optimzation(gradient descent) mode. For batch gradient descent optimization_mode =  {'mode': 0} and for mini-batch gradient descent optimization_mode =  {'mode': 1, 'batch_size': (specify  required size) }.",
+                            "description": "Optional optimization mode for type of gradient descent. {mode:1, 'batch_size': <your size>} for mini-batch and {mode: 0} for batch. Defaults to batch gradient descent.",
                             "type": "Object"
                         }
                     ]
@@ -15811,7 +15811,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 402,
+            "line": 400,
             "description": "This method is responsible for creating layers and initializing random weights.",
             "itemtype": "method",
             "name": "train_network",
@@ -15835,7 +15835,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 435,
+            "line": 433,
             "description": "This contains logic to predict result for a given input after training on data.",
             "itemtype": "method",
             "name": "predict_result",
@@ -15854,7 +15854,7 @@
         },
         {
             "file": "NeuralNetwork.js",
-            "line": 450,
+            "line": 448,
             "description": "This method is responsible for setting weights and biases of the Neural Network from storage.",
             "itemtype": "method",
             "name": "setWeights",

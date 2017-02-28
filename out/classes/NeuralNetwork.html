@@ -157,7 +157,7 @@
                                     <span class="type">Number</span>
 
                                 <div class="param-description">
-                                    <p>Optional threshold value for error.</p>
+                                    <p>Optional threshold value for cost. Defaults to 1/(e^3).</p>
 
                                 </div>
 
@@ -167,7 +167,7 @@
                                     <span class="type">Number</span>
 
                                 <div class="param-description">
-                                    <p>Optional regularization parameter to prevent overfitting.</p>
+                                    <p>Optional regularization parameter to prevent overfitting. Defaults to 0.01.</p>
 
                                 </div>
 
@@ -177,7 +177,7 @@
                                     <span class="type">Number</span>
 
                                 <div class="param-description">
-                                    <p>Optional value to execute the iteration_callback after every x number of iterations.</p>
+                                    <p>Optional value to execute the iteration_callback after every x number of iterations. Defaults to 100.</p>
 
                                 </div>
 
@@ -187,7 +187,7 @@
                                     <span class="type">Function</span>
 
                                 <div class="param-description">
-                                    <p>Optional callback that can be used for getting cost and iteration value on every notify count.</p>
+                                    <p>Optional callback that can be used for getting cost and iteration value on every notify count. Defaults to empty function.</p>
 
                                 </div>
 
@@ -197,7 +197,7 @@
                                     <span class="type">Number</span>
 
                                 <div class="param-description">
-                                    <p>Optional value for number of hidden layer units.</p>
+                                    <p>Value for number of hidden layer units.</p>
 
                                 </div>
 
@@ -207,7 +207,7 @@
                                     <span class="type">Number</span>
 
                                 <div class="param-description">
-                                    <p>Optional maximum iterations to be allowed before the optimization is complete.</p>
+                                    <p>Optional maximum iterations to be allowed before the optimization is complete. Defaults to 1000.</p>
 
                                 </div>
 
@@ -217,7 +217,7 @@
                                     <span class="type">Object</span>
 
                                 <div class="param-description">
-                                    <p>Optional optimzation(gradient descent) mode. For batch gradient descent optimization_mode =  {'mode': 0} and for mini-batch gradient descent optimization_mode =  {'mode': 1, 'batch_size': (specify  required size) }.</p>
+                                    <p>Optional optimization mode for type of gradient descent. {mode:1, 'batch_size': <your size>} for mini-batch and {mode: 0} for batch. Defaults to batch gradient descent.</p>
 
                                 </div>
 
@@ -850,7 +850,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l435"><code>NeuralNetwork.js:435</code></a>
+        <a href="../files/NeuralNetwork.js.html#l433"><code>NeuralNetwork.js:433</code></a>
         </p>
 
 
@@ -1058,7 +1058,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l450"><code>NeuralNetwork.js:450</code></a>
+        <a href="../files/NeuralNetwork.js.html#l448"><code>NeuralNetwork.js:448</code></a>
         </p>
 
 
@@ -1310,7 +1310,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/NeuralNetwork.js.html#l402"><code>NeuralNetwork.js:402</code></a>
+        <a href="../files/NeuralNetwork.js.html#l400"><code>NeuralNetwork.js:400</code></a>
         </p>
 
 

@@ -31,15 +31,15 @@ var callback = function (data) {
 var nn =  new window.NeuralNetwork({
         'hiddenLayerSize': 12,
         'learningRate': 0.1,
-        'threshold': undefined /*optional threshold value*/ ,
-        'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting*/ ,
+        'threshold': undefined /*optional threshold value for cost. Defaults to 1/(e^3).*/ ,
+        'regularization_parameter': 0.001 /*optional regularization parameter to prevent overfitting. Defaults to 0.01.*/ ,
         'optimization_mode': {
           'mode': 1,
           'batch_size': 2
-        } /*optional optimization mode for type of gradient descent. {mode:1, 'batch_size': <your size>} for mini-batch and {mode: 0} for batch.*/ ,
-        'notify_count': 10 /*optional value to execute the callback after every x number of iterations*/ ,
-        'iteration_callback': callback /*optional callback that can be used for getting cost and iteration value on every notify count.*/ ,
-        'maximum_iterations': 100 /*optional maximum iterations to be allowed*/
+        } /*optional optimization mode for type of gradient descent. {mode:1, 'batch_size': <your size>} for mini-batch and {mode: 0} for batch. Defaults to batch gradient descent.*/ ,
+        'notify_count': 10 /*optional value to execute the callback after every x number of iterations. Defaults to 100. */ ,
+        'iteration_callback': callback /*optional callback that can be used for getting cost and iteration value on every notify count. Defaults to empty function.*/ ,
+        'maximum_iterations': 100 /*optional maximum iterations to be allowed. Defaults to 1000.*/
       });
 
 nn.train_network([

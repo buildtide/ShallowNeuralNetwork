@@ -14,13 +14,13 @@ var window_object = (function(g) {
  * @constructor
  * @param {Object} args Contains all the necessary parameters for the neural network as listed below.
  * @param {Number} args.learningRate Learning rate for BackPropogation.
- * @param {Number} args.threshold_value Optional threshold value for error. 
- * @param {Number} args.regularization_parameter Optional regularization parameter to prevent overfitting. 
- * @param {Number} args.notify_count Optional value to execute the iteration_callback after every x number of iterations.
- * @param {Function} args.iteration_callback Optional callback that can be used for getting cost and iteration value on every notify count.
- * @param {Number} args.hiddenLayerSize Optional value for number of hidden layer units.
- * @param {Number} args.maximum_iterations Optional maximum iterations to be allowed before the optimization is complete. 
- * @param {Object} args.optimization_mode Optional optimzation(gradient descent) mode. For batch gradient descent optimization_mode =  {'mode': 0} and for mini-batch gradient descent optimization_mode =  {'mode': 1, 'batch_size': (specify  required size) }. 
+ * @param {Number} args.threshold_value Optional threshold value for cost. Defaults to 1/(e^3). 
+ * @param {Number} args.regularization_parameter Optional regularization parameter to prevent overfitting. Defaults to 0.01. 
+ * @param {Number} args.notify_count Optional value to execute the iteration_callback after every x number of iterations. Defaults to 100.
+ * @param {Function} args.iteration_callback Optional callback that can be used for getting cost and iteration value on every notify count. Defaults to empty function.
+ * @param {Number} args.hiddenLayerSize Value for number of hidden layer units.
+ * @param {Number} args.maximum_iterations Optional maximum iterations to be allowed before the optimization is complete. Defaults to 1000.
+ * @param {Object} args.optimization_mode  Optional optimization mode for type of gradient descent. {mode:1, 'batch_size': <your size>} for mini-batch and {mode: 0} for batch. Defaults to batch gradient descent.
  **/
 
 var NeuralNetwork = function(args) {
@@ -33,10 +33,10 @@ var NeuralNetwork = function(args) {
   }
   this.initArgs = args;
   this.threshold = args.threshold || (1 / this.MathJS.exp(3));
-  this.iteration_callback = args.iteration_callback;
+  this.iteration_callback = args.iteration_callback || function(){};
   this.hiddenLayerSize = args.hiddenLayerSize;
   this.regularization_param = args.regularization_param || 0.01;
-  this.learningRate = args.learningRate || 0.5;
+  this.learningRate = args.learningRate;
   this.optimization_mode = (args.optimization_mode === undefined) ? {
     'mode': 0
   } : args.optimization_mode;
