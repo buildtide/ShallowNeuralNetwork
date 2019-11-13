@@ -20,7 +20,7 @@ An artificial neural network with single hidden layer and multiclass classificat
 ```javascript
 //main.js file
 
-import {NeuralNetwork} from '@sofntmai/neuralnetwork';
+import {NeuralNetwork} from '@softnami/neuralnetwork';
 
 let callback_data;
 
