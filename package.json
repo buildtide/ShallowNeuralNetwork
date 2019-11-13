@@ -6,7 +6,7 @@
   "author": "Hussain Mir Ali",
   "license": "MIT",
   "dependencies": {
-    "csv-parse": "^1.0.1",
+    "csv-parse": "^4.6.5",
     "fs": "0.0.2",
     "mathjs": "^6.2.3",
     "sinon": "^1.17.2",
