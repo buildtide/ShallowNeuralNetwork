@@ -1,5 +1,5 @@
 {
-  "name": "shallow-neural-network",
+  "name": "@softnami/neuralnetwork",
   "version": "1.0.6",
   "description": "Artificial neural network for data prediction.",
   "main": "NeuralNetwork.js",
@@ -9,18 +9,29 @@
   "dependencies": {
     "csv-parse": "^1.0.1",
     "fs": "0.0.2",
-    "mathjs": "^2.5.0",
-    "q": "^1.4.1",
+    "mathjs": "^6.2.3",
     "sinon": "^1.17.2",
-    "yuidocjs": "^0.9.0",
-    "mocha": "^2.3.4"
+    "yuidocjs": "^0.9.0"
   },
-  "homepage": "https://github.com/husenxce/NeuralNetwork#readme",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --require @babel/register --timeout 30000"
+  },
+  "homepage": "https://github.com/husenxce/ShallowNeuralNetwork",
   "directories": {
     "test": "test"
   },
   "repository": {
     "type": "git",
-    "url": "-"
+    "url": "https://github.com/husenxce/ShallowNeuralNetwork"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.2",
+    "@babel/node": "^7.7.0",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/register": "^7.7.0",
+    "chai": "^4.2.0",
+    "mocha": "^2.5.3",
+    "nodemon": "^1.19.4"
   }
 }

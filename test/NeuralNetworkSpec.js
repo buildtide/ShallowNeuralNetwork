@@ -1,5 +1,5 @@
-'use strict';
-let NeuralNetwork = require('../NeuralNetwork');
+import {NeuralNetwork} from '../NeuralNetwork';
+
 let assert = require('assert');
 let mathJS = require('mathjs');
 let sinon = require('sinon');
@@ -102,7 +102,7 @@ describe('NeuralNetwork', function() {
         'z': X,
         'ones': ones
       };
-      let refSigX = mathJS.eval('(ones+(e.^(z.*-1))).^-1', scope); //1/(1+e^(-z))
+      let refSigX = mathJS.evaluate('(ones+(e.^(z.*-1))).^-1', scope); //1/(1+e^(-z))
 
       for (i = 0; i < sigX.size()[0]; i++) {
         for (j = 0; j < sigX.size()[1]; j++) {
@@ -130,7 +130,7 @@ describe('NeuralNetwork', function() {
         'z': X,
         'ones': ones
       };
-      let refSigX = mathJS.eval('(e.^(z.*-1))./(ones+(e.^(z.*-1))).^2', scope); //(1+e^(-z))/(1+e^(-z))^2
+      let refSigX = mathJS.evaluate('(e.^(z.*-1))./(ones+(e.^(z.*-1))).^2', scope); //(1+e^(-z))/(1+e^(-z))^2
 
       for (i = 0; i < sigX.size()[0]; i++) {
         for (j = 0; j < sigX.size()[1]; j++) {
@@ -153,11 +153,11 @@ describe('NeuralNetwork', function() {
       y_result = nn.forwardPropagation(X, W1, W2, 1, 1);
       z2 = mathJS.multiply(X, W1);
       scope.z2 = z2;
-      z2 = mathJS.eval('z2+1', scope);
+      z2 = mathJS.evaluate('z2+1', scope);
       a2 = nn.sigmoid(z2);
       z3 = mathJS.multiply(a2, W2);
       scope.z3 = z3;
-      z3 = mathJS.eval('z3+1', scope);
+      z3 = mathJS.evaluate('z3+1', scope);
       let y_resultRef = nn.sigmoid(z3);
       let i, j;
       let success = false;
@@ -190,7 +190,7 @@ describe('NeuralNetwork', function() {
       };
       let success = true;
 
-      let J1 = mathJS.sum(mathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]) + (getInitParams.regularization_param / 2) * (mathJS.sum(mathJS.eval('W1.^2', scope)) + mathJS.sum(mathJS.eval('W2.^2', scope))); //regularization parameter
+      let J1 = mathJS.sum(mathJS.evaluate('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]) + (getInitParams.regularization_param / 2) * (mathJS.sum(mathJS.evaluate('W1.^2', scope)) + mathJS.sum(mathJS.evaluate('W2.^2', scope))); //regularization parameter
 
           nn.setBias(mathJS.matrix([mathJS.ones(11)._data]), mathJS.matrix([mathJS.ones(Y.size()[1])._data]));
 
@@ -207,7 +207,7 @@ describe('NeuralNetwork', function() {
       let scope = {};
       scope.y_result = y_result;
       scope.y = Y;
-      scope.diff = mathJS.eval('-(y-y_result)', scope);
+      scope.diff = mathJS.evaluate('-(y-y_result)', scope);
       scope.sigmoid_Derivative_z3 = nn.sigmoid_Derivative(z3);
       scope.regularization_param = getInitParams.regularization_param;
       scope.W2 = W2;
@@ -215,20 +215,20 @@ describe('NeuralNetwork', function() {
       scope.m = X.size()[0];
       let success = false;
 
-      let del_3 = mathJS.eval('diff.*sigmoid_Derivative_z3', scope);
+      let del_3 = mathJS.evaluate('diff.*sigmoid_Derivative_z3', scope);
       let dJdW2 = mathJS.multiply(mathJS.transpose(a2), del_3);
       scope.dJdW2 = dJdW2;
-      scope.regularization_term_dJdW2 = mathJS.eval('W2.*regularization_param', scope);
-      dJdW2 = mathJS.eval('dJdW2.*(1/m) + regularization_term_dJdW2', scope);
+      scope.regularization_term_dJdW2 = mathJS.evaluate('W2.*regularization_param', scope);
+      dJdW2 = mathJS.evaluate('dJdW2.*(1/m) + regularization_term_dJdW2', scope);
 
       scope.arrA = mathJS.multiply(del_3, mathJS.transpose(W2));
       scope.arrB = nn.sigmoid_Derivative(z2);
 
-      let del_2 = mathJS.eval('arrA.*arrB', scope);
+      let del_2 = mathJS.evaluate('arrA.*arrB', scope);
       let dJdW1 = mathJS.multiply(mathJS.transpose(X), del_2);
       scope.dJdW1 = dJdW1;
-      scope.regularization_term_dJdW1 = mathJS.eval('W1.*regularization_param', scope);
-      dJdW1 = mathJS.eval('dJdW1.*(1/m) + regularization_term_dJdW1', scope);
+      scope.regularization_term_dJdW1 = mathJS.evaluate('W1.*regularization_param', scope);
+      dJdW1 = mathJS.evaluate('dJdW1.*(1/m) + regularization_term_dJdW1', scope);
 
       let dJdWRef = nn.costFunction_Derivative(X, Y, W1, W2);
       let i, j;

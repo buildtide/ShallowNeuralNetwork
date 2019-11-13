@@ -1,6 +1,6 @@
 # Shallow Neural Network 
 ###[Author: Hussain Mir Ali]
-An artificial neural network with single hidden layer and multiclass classification. This project has been written in JavaScript. The applications include disease prediction, optimizing workout routine and stock prediction. 
+An artificial neural network with single hidden layer and multiclass classification. This project has been written in JavaScript. The applications include modelling non-linear data.
 
 ##External Libraries Used:
 * mathjs License: https://github.com/josdejong/mathjs/blob/master/LICENSE
@@ -8,7 +8,6 @@ An artificial neural network with single hidden layer and multiclass classificat
 * sinon Licencse: https://github.com/sinonjs/sinon/blob/master/LICENSE
 * yuidocjs License: https://github.com/yui/yuidoc/blob/master/LICENSE
 * nodeJS License: https://github.com/nodejs/node/blob/master/LICENSE
-* q License: https://github.com/kriskowal/q/blob/v1/LICENSE
 
 ##Note: 
 * Please perform Feature Scaling and/or Mean Normalization along with random shuffling of data for using this program.
@@ -21,6 +20,9 @@ An artificial neural network with single hidden layer and multiclass classificat
 
 ```javascript
 //main.js file
+
+import {NeuralNetwork} from '@sofntmai/neuralnetwork';
+
 var callback_data;
 
 var callback = function (data) {
@@ -28,7 +30,7 @@ var callback = function (data) {
     callback_data = data;
 };
 
-var nn =  new window.NeuralNetwork({
+var nn =  new NeuralNetwork({
         'hiddenLayerSize': 12,
         'learningRate': 0.1,
         'threshold': undefined /*optional threshold value for cost. Defaults to 1/(e^3).*/ ,
@@ -60,30 +62,11 @@ nn.train_network([
 
 */
 ```
-```
-<!--index.html-->
-<!doctype html>
-<html>
-  <head>
-  </head>
-  <body >
-        <script src="neuralnetwork/lib/q.js"></script>
-        <script src="neuralnetwork/lib/math.js"></script>
-        <script src="neuralnetwork/NeuralNetwork.js"></script>
-         <!--Include the main.js file where you use the algorithm.-->
-        <script src="main.js"></script>
-</body>
-</html>
-
-*/
-```
 
 ##Testing:
 * For unit testing Mocha and Sinon have been used. 
-* On newer computers run the command 'mocha --timeout 50000', the 50000 ms timeout is to give enough time for tests to complete as they might not process before timeout. 
-* On older computers run the command 'mocha --timeout 300000', the 300000 ms timeout is to give enough time for tests to complete as they might not process before timeout on older computers. 
-* If need be more than 300000 ms should be used to run the tests depending on the processing power of the computer. 
+* Run 'npm test', if timeout occurs then increase timeout in test script.
 
 ##Documentation
 *  The documentation is available in the 'out' folder of this project. Open the 'index.html' file under the 'out' folder with Crhome or Firefox.
-*  To generate the documentation run 'yuidoc .' command in the main directory of this project.
+*  To generate the  documentation run 'yuidoc .' command in the main directory of this project.

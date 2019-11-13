@@ -1,11 +1,10 @@
 /**
-Copyright (c) 2015-2016 Hussain Mir Ali
+Copyright (c) 2015-2019 Hussain Mir Ali
 **/
 "use strict";
 
-let window_object = (function(g) {
-  return g;
-}(this));
+
+import * as math from 'mathjs';
 
 /**
  * The NeuralNetwork class contains all the necessary logic to train data for multiclass classification using single layer Neural Network.
@@ -24,13 +23,11 @@ let window_object = (function(g) {
  **/
 class NeuralNetwork {
   constructor(args) {
-    if (Object.keys(window_object).length === 0) {
-      this.MathJS = require('mathjs');
-      this.q = require('q');
-    } else {
-      this.MathJS = math;
-      this.q = Q;
-    }
+    
+    this.window_object = (function(g) {
+      return g;
+    }(this));
+    this.MathJS = math;
     this.initArgs = args;
     this.threshold = args.threshold || (1 / this.MathJS.exp(3));
     this.iteration_callback = args.iteration_callback || function() {};
@@ -83,7 +80,7 @@ class NeuralNetwork {
       scope.ones = this.MathJS.ones(scope.z.size()[0]);
     else
       scope.ones = this.MathJS.ones(scope.z.size()[0], scope.z.size()[1]);
-    sigmoid = this.MathJS.eval('(ones+(e.^(z.*-1))).^-1', scope); //1/(1+e^(-z))
+    sigmoid = this.MathJS.evaluate('(ones+(e.^(z.*-1))).^-1', scope); //1/(1+e^(-z))
     return sigmoid;
   }
 
@@ -108,21 +105,21 @@ class NeuralNetwork {
 
     scope.ones_l1 = this.MathJS.ones(X.size()[0], this.bias_l1.size()[0]);
     scope.bias_l1 = this.bias_l1;
-    scope.resized_bias_l1 = this.MathJS.eval('ones_l1*bias_l1', scope);
+    scope.resized_bias_l1 = this.MathJS.evaluate('ones_l1*bias_l1', scope);
 
     scope.ones_l2 = this.MathJS.ones(X.size()[0], this.bias_l2.size()[0]);
     scope.bias_l2 = this.bias_l2;
-    scope.resized_bias_l2 = this.MathJS.eval('ones_l2*bias_l2', scope);
+    scope.resized_bias_l2 = this.MathJS.evaluate('ones_l2*bias_l2', scope);
 
     scope.bias_l1 = bias_l1 || scope.resized_bias_l1;
     scope.bias_l2 = bias_l2 || scope.resized_bias_l2;
 
-    this.z2 = this.MathJS.eval('z2+bias_l1', scope);
+    this.z2 = this.MathJS.evaluate('z2+bias_l1', scope);
     this.a2 = this.sigmoid(this.z2);
     this.z3 = this.MathJS.multiply(this.a2, this.W2);
     scope.z3 = this.z3;
 
-    this.z3 = this.MathJS.eval('z3+bias_l2', scope);
+    this.z3 = this.MathJS.evaluate('z3+bias_l2', scope);
     y_result = this.sigmoid(this.z3);
     return y_result;
   }
@@ -140,7 +137,7 @@ class NeuralNetwork {
       },
       sigmoid_Derivative;
     scope.ones = this.MathJS.ones(z.size()[0], z.size()[1]);
-    sigmoid_Derivative = this.MathJS.eval('(e.^(z.*-1))./(ones+(e.^(z.*-1))).^2', scope); //(1+e^(-z))/(1+e^(-z))^2
+    sigmoid_Derivative = this.MathJS.evaluate('(e.^(z.*-1))./(ones+(e.^(z.*-1))).^2', scope); //(1+e^(-z))/(1+e^(-z))^2
 
     return sigmoid_Derivative;
   }
@@ -174,12 +171,12 @@ class NeuralNetwork {
       this.y_result = this.forwardPropagation(scope.x, undefined, undefined, undefined, undefined);
       scope.y_result = this.y_result;
 
-      J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) / (this.optimization_mode.batch_size) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval('W1.^2', scope)) + this.MathJS.sum(this.MathJS.eval('W2.^2', scope))); //cost with regularization parameter.
+      J = this.MathJS.sum(this.MathJS.evaluate('0.5*((y-y_result).^2)', scope)) / (this.optimization_mode.batch_size) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.evaluate('W1.^2', scope)) + this.MathJS.sum(this.MathJS.evaluate('W2.^2', scope))); //cost with regularization parameter.
     } else if (this.optimization_mode.mode === 0) { //cost with batch gradient descent.
       this.y_result = this.forwardPropagation(scope.x, undefined, undefined, undefined, undefined);
       scope.y_result = this.y_result;
 
-      J = this.MathJS.sum(this.MathJS.eval('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.eval('W1.^2', scope)) + this.MathJS.sum(this.MathJS.eval('W2.^2', scope))); //cost with regularization parameter.
+      J = this.MathJS.sum(this.MathJS.evaluate('0.5*((y-y_result).^2)', scope)) / (scope.x.size()[0]) + (this.regularization_param / 2) * (this.MathJS.sum(this.MathJS.evaluate('W1.^2', scope)) + this.MathJS.sum(this.MathJS.evaluate('W2.^2', scope))); //cost with regularization parameter.
     }
 
     return J;
@@ -216,30 +213,30 @@ class NeuralNetwork {
     scope.y = Y || this.y;
     scope.x = X || this.x;
 
-    scope.diff = this.MathJS.eval('-(y-y_result)', scope);
+    scope.diff = this.MathJS.evaluate('-(y-y_result)', scope);
     scope.sigmoid_Derivative_z3 = this.sigmoid_Derivative(this.z3);
     scope.regularization_param = this.regularization_param;
     scope.W2 = W2 || this.W2;
     scope.W1 = W1 || this.W1;
     scope.m = scope.x.size()[0];
 
-    let del_3 = this.MathJS.eval('diff.*sigmoid_Derivative_z3', scope);
+    let del_3 = this.MathJS.evaluate('diff.*sigmoid_Derivative_z3', scope);
     let dJdW2 = this.MathJS.multiply(this.MathJS.transpose(this.a2), del_3);
     scope.dJdW2 = dJdW2;
-    scope.regularization_term_dJdW2 = this.MathJS.eval('W2.*regularization_param', scope);
+    scope.regularization_term_dJdW2 = this.MathJS.evaluate('W2.*regularization_param', scope);
 
-    dJdW2 = this.MathJS.eval('dJdW2.*(1/m) + regularization_term_dJdW2', scope);
+    dJdW2 = this.MathJS.evaluate('dJdW2.*(1/m) + regularization_term_dJdW2', scope);
 
     scope.arrA = this.MathJS.multiply(del_3, this.MathJS.transpose(this.W2));
     scope.arrB = this.sigmoid_Derivative(this.z2);
 
-    let del_2 = this.MathJS.eval('arrA.*arrB', scope);
+    let del_2 = this.MathJS.evaluate('arrA.*arrB', scope);
     let dJdW1 = this.MathJS.multiply(this.MathJS.transpose(scope.x), del_2);
 
     scope.dJdW1 = dJdW1;
-    scope.regularization_term_dJdW1 = this.MathJS.eval('W1.*regularization_param', scope);
+    scope.regularization_term_dJdW1 = this.MathJS.evaluate('W1.*regularization_param', scope);
 
-    dJdW1 = this.MathJS.eval('dJdW1.*(1/m) + regularization_term_dJdW1', scope);
+    dJdW1 = this.MathJS.evaluate('dJdW1.*(1/m) + regularization_term_dJdW1', scope);
 
     return [dJdW1, dJdW2, del_2, del_3];
 
@@ -254,8 +251,7 @@ class NeuralNetwork {
    * @return {Boolean} Returns true after succesfuly saving the weights.
    */
   saveWeights(weights, biases) {
-    let defered = this.q.defer();
-    if (Object.keys(window_object).length === 0) {
+    if (Object.keys(this.window_object).length === 0) {
       global.localStorage.setItem("Weights", JSON.stringify(weights));
       global.localStorage.setItem("Biases", JSON.stringify(biases));
     } else {
@@ -319,7 +315,6 @@ class NeuralNetwork {
       W2 = _W2,
       cost,
       scope = {},
-      defered = this.q.defer(),
       i = 1,
       inner_iterations = 0,
       epochs = 0;
@@ -342,18 +337,18 @@ class NeuralNetwork {
       scope.del_3 = gradient[3];
       scope.del_3_mean = this.MathJS.mean(gradient[3], 0);
       scope.del_3_size = scope.del_3.size()[0];
-      scope.del_3 = [this.MathJS.eval('del_3_size*del_3_mean', scope)];
+      scope.del_3 = [this.MathJS.evaluate('del_3_size*del_3_mean', scope)];
 
       scope.del_2 = gradient[2];
       scope.del_2_mean = this.MathJS.mean(gradient[2], 0);
       scope.del_2_size = scope.del_2.size()[0];
-      scope.del_2 = [this.MathJS.eval('del_2_size*del_2_mean', scope)];
+      scope.del_2 = [this.MathJS.evaluate('del_2_size*del_2_mean', scope)];
 
-      this.W2 = this.MathJS.eval('W2 - dJdW2.*rate', scope);
-      this.W1 = this.MathJS.eval('W1 - dJdW1.*rate', scope);
+      this.W2 = this.MathJS.evaluate('W2 - dJdW2.*rate', scope);
+      this.W1 = this.MathJS.evaluate('W1 - dJdW1.*rate', scope);
 
-      this.bias_l1 = this.MathJS.eval('bias_l1-del_2', scope);
-      this.bias_l2 = this.MathJS.eval('bias_l2-del_3', scope);
+      this.bias_l1 = this.MathJS.evaluate('bias_l1-del_2', scope);
+      this.bias_l2 = this.MathJS.evaluate('bias_l2-del_3', scope);
 
       if (x !== undefined && y !== undefined)
         cost = this.costFunction(x, y, undefined, undefined, inner_iterations);
@@ -391,8 +386,9 @@ class NeuralNetwork {
 
       if (i > this.maximum_iterations || cost <= (this.threshold)) {
         this.saveWeights([this.W1, this.W2], [this.bias_l1, this.bias_l2]);
-        defered.resolve([cost, i]);
-        return defered.promise;
+        return new Promise((resolve, reject)=>{
+            resolve([cost, i]);
+        });
       }
     }
   }
@@ -454,7 +450,7 @@ class NeuralNetwork {
   setWeights() {
     let self = this;
     let weights, biases;
-    if (Object.keys(window_object).length === 0) {
+    if (Object.keys(this.window_object).length === 0) {
       weights = JSON.parse(global.localStorage.getItem("Weights"));
       biases = JSON.parse(global.localStorage.getItem("Biases"));
     } else {
@@ -472,9 +468,4 @@ class NeuralNetwork {
   }
 }
 
-
-if (Object.keys(window_object).length === 0) {
-  module.exports = NeuralNetwork;
-} else {
-  window['NeuralNetwork'] = NeuralNetwork;
-}
+export {NeuralNetwork};
