@@ -4,8 +4,7 @@
   "description": "Artificial neural network for data prediction.",
   "main": "NeuralNetwork.js",
   "author": "Hussain Mir Ali",
-  "private": true,
-  "license": "",
+  "license": "MIT",
   "dependencies": {
     "csv-parse": "^1.0.1",
     "fs": "0.0.2",
