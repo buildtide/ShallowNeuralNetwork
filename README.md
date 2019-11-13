@@ -22,14 +22,14 @@ An artificial neural network with single hidden layer and multiclass classificat
 
 import {NeuralNetwork} from '@sofntmai/neuralnetwork';
 
-var callback_data;
+let callback_data;
 
-var callback = function (data) {
+let callback = function (data) {
     console.log(data);
     callback_data = data;
 };
 
-var nn =  new NeuralNetwork({
+let nn =  new NeuralNetwork({
         'hiddenLayerSize': 12,
         'learningRate': 0.1,
         'threshold': undefined /*optional threshold value for cost. Defaults to 1/(e^3).*/ ,
