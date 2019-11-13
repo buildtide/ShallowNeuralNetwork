@@ -13,8 +13,7 @@ An artificial neural network with single hidden layer and multiclass classificat
 * Please perform Feature Scaling and/or Mean Normalization along with random shuffling of data for using this program.
 
 ##Installation:
-*  Download the project and unzip it.
-*  Copy the 'neuralnetwork' folder to your project directory.
+*  Run 'npm install @softnami/neuralnetwork'.
 
 ###Sample usage:
 
