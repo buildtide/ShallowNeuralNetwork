@@ -21,12 +21,9 @@ import * as math from 'mathjs';
  * @param {Number} args.maximum_iterations Optional maximum iterations to be allowed before the optimization is complete. Defaults to 1000.
  * @param {Object} args.optimization_mode  Optional optimization mode for type of gradient descent. {mode:1, 'batch_size': <your size>} for mini-batch and {mode: 0} for batch. Defaults to batch gradient descent.
  **/
-class NeuralNetwork {
+export class NeuralNetwork {
   constructor(args) {
     
-    this.window_object = (function(g) {
-      return g;
-    }(this));
     this.MathJS = math;
     this.initArgs = args;
     this.threshold = args.threshold || (1 / this.MathJS.exp(3));
@@ -251,7 +248,7 @@ class NeuralNetwork {
    * @return {Boolean} Returns true after succesfuly saving the weights.
    */
   saveWeights(weights, biases) {
-    if (Object.keys(this.window_object).length === 0) {
+    if (!!!localStorage) {
       global.localStorage.setItem("Weights", JSON.stringify(weights));
       global.localStorage.setItem("Biases", JSON.stringify(biases));
     } else {
@@ -386,6 +383,7 @@ class NeuralNetwork {
 
       if (i > this.maximum_iterations || cost <= (this.threshold)) {
         this.saveWeights([this.W1, this.W2], [this.bias_l1, this.bias_l2]);
+        console.log("\n Visit http://www.softnami.com/dailycoding/signup.html to get a daily coding question at your email. \n");
         return new Promise((resolve, reject)=>{
             resolve([cost, i]);
         });
@@ -450,7 +448,7 @@ class NeuralNetwork {
   setWeights() {
     let self = this;
     let weights, biases;
-    if (Object.keys(this.window_object).length === 0) {
+    if (!!!localStorage) {
       weights = JSON.parse(global.localStorage.getItem("Weights"));
       biases = JSON.parse(global.localStorage.getItem("Biases"));
     } else {
@@ -467,5 +465,3 @@ class NeuralNetwork {
     return [self.W1._data, self.W2._data, self.bias_l1, self.bias_l2];
   }
 }
-
-export {NeuralNetwork};
