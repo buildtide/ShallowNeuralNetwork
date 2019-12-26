@@ -1,5 +1,8 @@
 # Shallow Neural Network 
 ### [Author: Hussain Mir Ali]
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Artificial_Neural_Network.jpg"  width="500px" alt="shallownetwork"></img>
+
 An artificial neural network with single hidden layer and multiclass classification. This project has been written in JavaScript. The applications include modelling non-linear data.
 
 ## External Libraries Used:
