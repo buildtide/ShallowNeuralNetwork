@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2015-2019 Hussain Mir Ali
+Copyright (c) 2015-2020 Hussain Mir Ali
 **/
 "use strict";
 

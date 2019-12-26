@@ -3,7 +3,6 @@ import {NeuralNetwork} from '../NeuralNetwork';
 let assert = require('assert');
 let mathJS = require('mathjs');
 let sinon = require('sinon');
-let parse = require('csv-parse');
 
 describe('NeuralNetwork', function() {
 
