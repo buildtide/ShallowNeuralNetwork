@@ -21,7 +21,7 @@ import * as math from 'mathjs';
  * @param {Number} args.maximum_iterations Optional maximum iterations to be allowed before the optimization is complete. Defaults to 1000.
  * @param {Object} args.optimization_mode  Optional optimization mode for type of gradient descent. {mode:1, 'batch_size': <your size>} for mini-batch and {mode: 0} for batch. Defaults to batch gradient descent.
  **/
-export class NeuralNetwork {
+export default class NeuralNetwork {
   constructor(args) {
     
     this.MathJS = math;

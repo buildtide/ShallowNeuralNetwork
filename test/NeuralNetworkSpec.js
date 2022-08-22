@@ -1,4 +1,4 @@
-import {NeuralNetwork} from '../NeuralNetwork';
+import NeuralNetwork from '../NeuralNetwork';
 
 let assert = require('assert');
 let mathJS = require('mathjs');
