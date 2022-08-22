@@ -305,7 +305,6 @@ export class NeuralNetwork {
    */
   gradientDescent(X, Y, _W1, _W2) {
     let gradient = new Array(2),
-      self = this,
       x = X || this.x,
       y = Y || this.y,
       W1 = _W1,
@@ -354,10 +353,10 @@ export class NeuralNetwork {
           'cost': cost,
           'epochs': epochs,
           'iteration': i /*iteration count*/ ,
-          'Weights_Layer1': self.W1,
-          'Weights_Layer2': self.W2,
-          'Bias_Layer1': self.bias_l1,
-          'Bias_Layer2': self.bias_l2,
+          'Weights_Layer1': this.W1,
+          'Weights_Layer2': this.W2,
+          'Bias_Layer1': this.bias_l1,
+          'Bias_Layer2': this.bias_l2,
           'gradient': gradient
         }]); //notify cost values for diagnosing the performance of learning algorithm.
       }
@@ -446,7 +445,6 @@ export class NeuralNetwork {
    * @return {Object} Returns a resolved promise after successfuly setting weights and biases.
    */
   setWeights() {
-    let self = this;
     let weights, biases;
     if (!!!localStorage) {
       weights = JSON.parse(global.localStorage.getItem("Weights"));
@@ -456,12 +454,12 @@ export class NeuralNetwork {
       biases = JSON.parse(localStorage.getItem("Biases"));
     }
 
-    self.W1 = this.MathJS.matrix(weights[0].data);
-    self.W2 = this.MathJS.matrix(weights[1].data);
+    this.W1 = this.MathJS.matrix(weights[0].data);
+    this.W2 = this.MathJS.matrix(weights[1].data);
 
-    self.bias_l1 = this.MathJS.matrix(biases[0].data);
-    self.bias_l2 = this.MathJS.matrix(biases[1].data);
+    this.bias_l1 = this.MathJS.matrix(biases[0].data);
+    this.bias_l2 = this.MathJS.matrix(biases[1].data);
 
-    return [self.W1._data, self.W2._data, self.bias_l1, self.bias_l2];
+    return [this.W1._data, this.W2._data, this.bias_l1, this.bias_l2];
   }
 }

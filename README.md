@@ -3,14 +3,7 @@
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Artificial_Neural_Network.jpg"  width="500px" alt="shallownetwork"></img>
 
-An artificial neural network with single hidden layer and multiclass classification. This project has been written in JavaScript. The applications include modelling non-linear data.
-
-## External Libraries Used:
-* mathjs License: https://github.com/josdejong/mathjs/blob/master/LICENSE
-* mocha License: https://github.com/mochajs/mocha/blob/master/LICENSE
-* sinon Licencse: https://github.com/sinonjs/sinon/blob/master/LICENSE
-* yuidocjs License: https://github.com/yui/yuidoc/blob/master/LICENSE
-* nodeJS License: https://github.com/nodejs/node/blob/master/LICENSE
+An artificial neural network with single hidden layer and multiclass classification. The applications include modelling non-linear data.
 
 ## Note: 
 * Please perform Feature Scaling and/or Mean Normalization along with random shuffling of data for using this program.
@@ -23,10 +16,11 @@ An artificial neural network with single hidden layer and multiclass classificat
 ```javascript
 //main.js file
 
-import {NeuralNetwork} from '@softnami/neuralnetwork';
+import NeuralNetwork from '@softnami/neuralnetwork';
 
 let callback_data;
 
+//callback for diagnostics
 let callback = function (data) {
     console.log(data);
     callback_data = data;
@@ -72,3 +66,4 @@ nn.train_network([
 ## Documentation
 *  The documentation is available in the 'out' folder of this project. Open the 'index.html' file under the 'out' folder with Crhome or Firefox.
 *  To generate the  documentation run 'yuidoc .' command in the main directory of this project.
+
