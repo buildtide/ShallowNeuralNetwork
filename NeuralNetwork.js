@@ -198,8 +198,8 @@ export default class NeuralNetwork {
       this.y = Y || this.y;
 
       let batch_size = this.optimization_mode.batch_size;
-      let X = this.MathJS.matrix(this.x._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
-      let Y = this.MathJS.matrix(this.y._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
+      X = this.MathJS.matrix(this.x._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
+      Y = this.MathJS.matrix(this.y._data.slice(batch_size * iteration_count, batch_size + (batch_size * iteration_count)));
 
     }
 
@@ -382,7 +382,6 @@ export default class NeuralNetwork {
 
       if (i > this.maximum_iterations || cost <= (this.threshold)) {
         this.saveWeights([this.W1, this.W2], [this.bias_l1, this.bias_l2]);
-        console.log("\n Visit http://www.softnami.com/dailycoding/signup.html to get a daily coding question at your email. \n");
         return new Promise((resolve, reject)=>{
             resolve([cost, i]);
         });
