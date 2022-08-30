@@ -1,5 +1,6 @@
 # Shallow Neural Network 
 ### [Author: Hussain Mir Ali]
+#### [Hire me,](mailto:hkmirali+npm@gmail.com) I can build your next project. 
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Artificial_Neural_Network.jpg"  width="500px" alt="shallownetwork"></img>
 

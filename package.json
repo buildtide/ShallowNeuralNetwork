@@ -1,6 +1,6 @@
 {
   "name": "@softnami/neuralnetwork",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Artificial neural network for data prediction.",
   "main": "NeuralNetwork.js",
   "author": "Hussain Mir Ali",
